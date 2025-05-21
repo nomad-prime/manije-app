@@ -23,7 +23,7 @@ const JobCard = ({ job, zoomLevel }: { job: JobRecord; zoomLevel: number }) => {
   const hideContent = zoomLevel < 1;
 
   return (
-    <Card className="w-full h-full bg-input/30 hover:cursor-auto">
+    <Card className="w-full h-full bg-input/30 hover:cursor-auto hover:outline">
       <CardHeader>
         <CardTitle
           style={{

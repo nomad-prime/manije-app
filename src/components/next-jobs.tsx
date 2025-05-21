@@ -9,7 +9,7 @@ export const NextJob = ({ job }: { job: JobRequest }) => {
   return (
     <CustomButton
       variant="outline"
-      className="group relative overflow-hidden p-2"
+      className="group relative p-2"
     >
       <Stars />
       <span>{jobType?.name ?? "Job Prototype"}</span>
