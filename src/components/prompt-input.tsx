@@ -4,9 +4,15 @@ import { useState, useRef, ChangeEvent, KeyboardEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
-import {CustomTextarea} from "@/components/ui/custom-textarea";
+import { CustomTextarea } from "@/components/ui/custom-textarea";
 
-const PromptInput = ({ onSubmit, disabled }: { onSubmit: (prompt: string) => void, disabled: boolean }) => {
+const PromptInput = ({
+  onSubmit,
+  disabled,
+}: {
+  onSubmit: (prompt: string) => void;
+  disabled: boolean;
+}) => {
   const [value, setValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 

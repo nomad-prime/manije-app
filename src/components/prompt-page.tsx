@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import useJobs from "@/hooks/use-jobs";
 import { Loader2 } from "lucide-react";
-import JobGrid from "@/components/job-grid";
+import JobList from "@/components/job-list";
 
 export default function PromptPage() {
   const [mode, setMode] = useState<"initial" | "list">("initial");
@@ -41,7 +41,7 @@ export default function PromptPage() {
     <LayoutGroup>
       <AnimatePresence mode="wait">
         {mode === "initial" && (
-          <div className="flex flex-row items-center justify-center gap-8 px-4 h-full">
+          <div className="flex flex-row items-center justify-center gap-8 h-full">
             <motion.div layoutId="prompt">
               <PromptInput onSubmit={createJob} disabled={isPending} />
             </motion.div>
@@ -49,8 +49,8 @@ export default function PromptPage() {
         )}
         {mode === "list" && (
           <div className="h-full flex flex-col ">
-            <div className="flex-1 overflow-y-auto flex flex-col px-4 pb-[120px] ">
-              {jobs && jobs.length > 0 && <JobGrid jobs={jobs}/>}
+            <div className="flex-1 overflow-y-auto flex flex-col pb-[120px] ">
+              {jobs && jobs.length > 0 && <JobList jobs={jobs}/>}
             </div>
             <motion.div
               layoutId="prompt"

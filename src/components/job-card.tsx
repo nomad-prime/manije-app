@@ -77,7 +77,7 @@ const JobCard = ({ jobId }: { jobId: string }) => {
   };
 
   return (
-    <Card className="w-full h-full bg-input/30 hover:cursor-auto hover:outline">
+    <Card className="h-full bg-input/30 hover:cursor-auto hover:outline">
       <CardHeader>
         <CardTitle>{jobType?.name ?? "Job Prototype"}</CardTitle>
         <CardDescription>
