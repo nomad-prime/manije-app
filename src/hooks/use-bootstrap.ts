@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { baseUrl } from "@/lib/urls";
-import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
+import { useAuthFetch } from "@/hooks/use-auth-fetch";
 
 export default function useBootstrap() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const fetchWithAuth = useFetchWithAuth();
+  const fetchWithAuth = useAuthFetch();
 
   useEffect(() => {
     fetchWithAuth(`${baseUrl}/system/bootstrap`, {

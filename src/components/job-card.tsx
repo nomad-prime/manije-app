@@ -1,4 +1,3 @@
-import { JobRecord } from "@/hooks/useJobs";
 import {
   Card,
   CardContent,
@@ -7,52 +6,111 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import useJobType from "@/hooks/useJobType";
+import useJobType from "@/hooks/use-job-type";
 import PostJobActions from "@/components/post-job-actions";
 import { NextJobs } from "@/components/next-jobs";
+import { Label } from "@/components/ui/label";
+import { ChangeEvent, useState } from "react";
+import useUpdateJob from "@/hooks/use-update-job";
+import { useExecuteAction } from "@/hooks/use-execute-action";
+import { CustomTextarea } from "@/components/ui/custom-textarea";
+import { useProject } from "@/components/project-context";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/cache-keys";
+import useJob from "@/hooks/use-job";
+import { Action } from "@/hooks/use-jobs";
 
-const JobCard = ({ job, zoomLevel }: { job: JobRecord; zoomLevel: number }) => {
-  const { data: jobType } = useJobType(job.job_type_id);
-  const titleFontSize = Math.max(10, Math.min(18, 14 * zoomLevel));
-  const descriptionFontSize = Math.max(8, Math.min(16, 12 * zoomLevel));
-  const contentFontSize = Math.max(6, Math.min(14, 10 * zoomLevel));
-  const output = job.output ?? {};
-  const nextJobs = job.next_jobs ?? [];
-  const postJobActions = job.post_job_actions ?? [];
+const JobCard = ({ jobId }: { jobId: string }) => {
+  const { data: job } = useJob({ id: jobId });
+  const { currentProjectId, setCurrentProjectId } = useProject();
+  const { data: jobType } = useJobType(job?.job_type_id);
+  const { mutate: updateJobRecord } = useUpdateJob(job?.id);
+  const { mutateAsync: executeAction } = useExecuteAction();
+  const queryClient = useQueryClient();
 
-  const hideContent = zoomLevel < 1;
+  const output = job?.output ?? {};
+  const nextJobs = job?.next_jobs ?? [];
+  const postJobActions = job?.post_job_actions ?? [];
+
+  const [executingActions, setExecutingActions] = useState<string[]>([]);
+
+  const [data, setData] = useState(output);
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleActionClick = async (action: Action) => {
+    setExecutingActions((prevActions) => [...prevActions, action.name]);
+    await handleSave();
+    try {
+      await executeAction({
+        action: action.name,
+        data: output,
+        job_record_id: job?.id,
+      });
+    } catch (error) {
+      console.error("Error executing action:", error);
+    } finally {
+      setExecutingActions((prevActions) =>
+        prevActions.filter((a) => a !== action.name),
+      );
+      if (!currentProjectId && job?.project_id) {
+        setCurrentProjectId(job?.project_id);
+      }
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.projects.all(),
+      });
+      if (job?.id)
+        await queryClient.invalidateQueries({
+          queryKey: queryKeys.jobs.id(job.id),
+        });
+    }
+  };
+
+  const handleSave = async () => {
+    updateJobRecord({ output: data });
+  };
 
   return (
     <Card className="w-full h-full bg-input/30 hover:cursor-auto hover:outline">
       <CardHeader>
-        <CardTitle
-          style={{
-            fontSize: `${titleFontSize}px`,
-          }}
-        >
-          {jobType?.name ?? "Job Prototype"}
-        </CardTitle>
-        <CardDescription
-          style={{
-            fontSize: `${descriptionFontSize}px`,
-          }}
-        >
+        <CardTitle>{jobType?.name ?? "Job Prototype"}</CardTitle>
+        <CardDescription>
           {jobType?.description ?? "Job Description"}
         </CardDescription>
       </CardHeader>
-      {!hideContent && (
-        <CardContent
-          className="grid gap-2"
-          style={{ fontSize: `${contentFontSize}px` }}
-        >
-          {JSON.stringify(output, null, 2)}
-        </CardContent>
-      )}
+
+      <CardContent className="flex flex-col gap-2 h-full">
+        {Object.entries(data).map(([key, value]) => (
+          <div key={key} className="flex flex-col gap-2 h-full">
+            <Label htmlFor={`output-${key}`} className="mt-2">
+              {key}
+            </Label>
+            <CustomTextarea
+              id={`output-${key}`}
+              name={key}
+              className="resize-none overflow-auto flex-grow"
+              value={typeof value === "string" ? value : JSON.stringify(value)}
+              onChange={handleChange}
+              onBlur={handleSave}
+            />
+          </div>
+        ))}
+      </CardContent>
       <CardFooter className="flex flex-col items-start gap-4 px-4 pb-4">
-        <p className="text-sm text-muted-foreground">{job.stage}</p>
+        <p className="text-sm text-muted-foreground">{job?.stage}</p>
 
         {postJobActions.length > 0 && (
-          <PostJobActions actions={postJobActions} output={output} />
+          <PostJobActions
+            actions={postJobActions}
+            executingActions={executingActions}
+            onActionClick={handleActionClick}
+          />
         )}
 
         {nextJobs.length > 0 && <NextJobs jobs={nextJobs} />}

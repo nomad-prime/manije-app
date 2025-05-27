@@ -2,7 +2,6 @@
 import {
   OrganizationList,
   OrganizationProfile,
-  OrganizationSwitcher,
   useOrganization,
 } from "@clerk/nextjs";
 import { ArrowLeft } from "lucide-react";

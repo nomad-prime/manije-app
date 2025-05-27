@@ -1,10 +1,10 @@
 "use client";
 
 import PromptInput from "@/components/prompt-input";
-import useCreateJob from "@/hooks/useCreateJob";
+import useCreateJob from "@/hooks/use-create-job";
 import { useEffect, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import useJobs from "@/hooks/useJobs";
+import useJobs from "@/hooks/use-jobs";
 import { Loader2 } from "lucide-react";
 import JobGrid from "@/components/job-grid";
 
@@ -12,9 +12,7 @@ export default function PromptPage() {
   const [mode, setMode] = useState<"initial" | "list">("initial");
 
   const { mutateAsync, isPending } = useCreateJob();
-  const { data: jobs, isLoading } = useJobs({
-    enabled: mode === "list",
-  });
+  const { data: jobs, isLoading } = useJobs();
 
   const createJob = async (prompt: string) => {
     try {
@@ -50,8 +48,8 @@ export default function PromptPage() {
           </div>
         )}
         {mode === "list" && (
-          <div className="h-full flex flex-col">
-            <div className="flex-1 overflow-y-auto flex flex-col px-4 pb-[120px]">
+          <div className="h-full flex flex-col ">
+            <div className="flex-1 overflow-y-auto flex flex-col px-4 pb-[120px] ">
               {jobs && jobs.length > 0 && <JobGrid jobs={jobs}/>}
             </div>
             <motion.div

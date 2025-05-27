@@ -47,23 +47,23 @@
   --radius: 0.7rem;
   --background: #faf9f7;
   --foreground: #204d46;
-  --card: #ffffff;
+  --card: #faf9f7;
   --card-foreground: #204d46;
-  --popover: oklch(1 0 0);
+  --popover: #faf9f7;
   --popover-foreground: oklch(0.145 0 0);
   --primary: #204d46;
   --primary-foreground: #faf9f7;
   --secondary: #fff8e7;
   --secondary-foreground: #204d46;
-  --muted: #f1f0ee;
+  --muted: #fff8e7;
   --muted-foreground: oklch(0.345 0 89.876);
-  --accent: rgba(134, 189, 181, 0.47);
+  --accent: #fff8e7;
   --accent-foreground: #204d46;
   --destructive: #b00020;
   --border: #e2e0dd;
   --input: #d1d1d1;
   --ring: #86bdb5;
-  --glow: oklch(0.6 0.118 184.704);
+  --glow: #86bdb5;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -82,23 +82,23 @@
 .dark {
   --background: #050e0c;
   --foreground: #e7f1ef;
-  --card: oklch(1 0 0 / 15%);
+  --card: #0e1a17;
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: #0e1a17;
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: #0e1a17;
   --secondary: oklch(1 0 0 / 15%);
   --secondary-foreground: oklch(0.985 0 0);
-  --muted: #071311;
+  --muted: oklch(1 0 0 / 15%);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
+  --accent: oklch(1 0 0 / 15%);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: #86bdb5;
-  --glow: #204d46;
+  --glow: #c8fffb;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -120,14 +120,6 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
     font-family: "Space Grotesk", sans-serif;
   }
 }
@@ -143,5 +135,14 @@ body {
 @layer base {
   button {
     cursor: pointer;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }

@@ -1,31 +1,33 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
+import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 
-type Job = {
-  input: string;
+type JobData = {
+  [key: string]: unknown;
 }
 
 type SaveJobArgs = {
-  data: Job;
+  data: JobData;
+  project_id?: string;
+  job_type_id?: string;
 };
 
 export default function useCreateJob() {
-  const fetchWithAuth = useFetchWithAuth();
+  const fetchWithAuth = useAuthFetch();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ data }: SaveJobArgs) => {
+    mutationFn: async (args: SaveJobArgs) => {
       const url = `${baseUrl}/jobs`;
 
       const res = await fetchWithAuth(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          data: {
-            input: data.input,
-          }
+          data: args.data,
+          project_id: args.project_id,
+          job_type_id: args.job_type_id,
         }),
       });
 

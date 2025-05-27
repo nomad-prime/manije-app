@@ -3,7 +3,7 @@
 import { useAuth } from "@clerk/nextjs";
 import { useCallback } from "react";
 
-export function useFetchWithAuth() {
+export function useAuthFetch() {
   const { getToken } = useAuth();
 
   return useCallback(

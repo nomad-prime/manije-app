@@ -1,12 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { useFetchWithAuth } from "@/hooks/useFetchWithAuth";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
+import { queryKeys } from "@/hooks/cache-keys";
 
 export interface Action {
   id: string;
   name: string;
   label: string;
   args: string;
+  executed: boolean;
 }
 
 export interface JobRequest {
@@ -27,12 +29,14 @@ export interface JobRecord {
   post_job_actions?: Action[];
   next_jobs?: JobRequest[];
   error_message?: string;
+  project_id?: string;
 }
 
-const useJobs = ({ enabled }: { enabled: boolean }) => {
-  const fetchWithAuth = useFetchWithAuth();
-  return useQuery({
-    queryKey: ["jobs"],
+const useJobs = () => {
+  const fetchWithAuth = useAuthFetch();
+  const queryClient = useQueryClient();
+  const { data, ...rest } = useQuery({
+    queryKey: queryKeys.jobs.all(),
     queryFn: async (): Promise<JobRecord[]> => {
       const response = await fetchWithAuth(`${baseUrl}/jobs`);
       if (!response.ok) {
@@ -40,8 +44,16 @@ const useJobs = ({ enabled }: { enabled: boolean }) => {
       }
       return response.json();
     },
-    enabled: enabled,
   });
+
+  data?.forEach((job) => {
+    queryClient.setQueryData(queryKeys.jobs.id(job.id), job);
+  });
+
+  return {
+    ...rest,
+    data: data ?? [],
+  };
 };
 
 export default useJobs;

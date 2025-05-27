@@ -3,8 +3,8 @@
 import { useState, useRef, ChangeEvent, KeyboardEvent } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { ArrowUp } from "lucide-react";
+import {CustomTextarea} from "@/components/ui/custom-textarea";
 
 const PromptInput = ({ onSubmit, disabled }: { onSubmit: (prompt: string) => void, disabled: boolean }) => {
   const [value, setValue] = useState("");
@@ -43,9 +43,9 @@ const PromptInput = ({ onSubmit, disabled }: { onSubmit: (prompt: string) => voi
           }
         }
       }}
-      className="relative w-full min-w-[600px] max-w-[800px] bg-muted"
+      className="relative w-full min-w-[600px] max-w-[800px]"
     >
-      <Textarea
+      <CustomTextarea
         ref={textareaRef}
         value={value}
         onChange={handleInput}

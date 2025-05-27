@@ -1,0 +1,26 @@
+import { useQuery } from "@tanstack/react-query";
+import { useAuthFetch } from "@/hooks/use-auth-fetch";
+import { baseUrl } from "@/lib/urls";
+import { queryKeys } from "@/hooks/cache-keys";
+import { JobRecord } from "@/hooks/use-jobs";
+
+const useJobs = ({ id }: { id: string }) => {
+  const fetchWithAuth = useAuthFetch();
+  const { data, ...rest } = useQuery({
+    queryKey: queryKeys.jobs.id(id),
+    queryFn: async (): Promise<JobRecord> => {
+      const response = await fetchWithAuth(`${baseUrl}/jobs/${id}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch job types");
+      }
+      return response.json();
+    },
+  });
+
+  return {
+    ...rest,
+    data
+  };
+};
+
+export default useJobs;
