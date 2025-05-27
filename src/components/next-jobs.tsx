@@ -33,8 +33,8 @@ export const NextJob = ({ jobRequest }: { jobRequest: JobRequest }) => {
 export const NextJobs = ({ jobs }: { jobs: JobRequest[] }) => {
   return (
     <div className="flex flex-wrap gap-2">
-      {jobs.map((nextJob: JobRequest) => (
-        <NextJob jobRequest={nextJob} key={nextJob.job_type_id} />
+      {jobs.map((nextJobRequest: JobRequest) => (
+        <NextJob jobRequest={nextJobRequest} key={nextJobRequest.job_type_id} />
       ))}
     </div>
   );
