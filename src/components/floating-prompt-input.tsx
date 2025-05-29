@@ -69,7 +69,7 @@ const FloatingPromptInput = ({
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2 }}
           onClick={handleToggle}
-          className="fixed bottom-4 right-4 z-30 w-12 h-12 rounded-full flex bg-muted items-center justify-center shadow-lg"
+          className="fixed bottom-4 right-4 z-30 w-10 h-10 rounded-full flex bg-muted items-center justify-center shadow-lg"
         >
           <Manije className="w-8 h-8" />
         </motion.button>
