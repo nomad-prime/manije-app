@@ -1,19 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEvent, SyntheticEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { CustomButton } from "@/components/ui/custom-button";
-import { ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import useProjects from "@/hooks/use-projects";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useCurrentProject } from "@/components/project-context";
 
 export const SelectProjects = () => {
   const { data: projects } = useProjects();
+  const { currentProjectId, setCurrentProjectId } = useCurrentProject();
+
+  const handleSelect = (value: string) => {
+    if (value === currentProjectId) return;
+    setCurrentProjectId(value);
+  };
 
   return (
     <AnimatePresence>
@@ -25,21 +31,18 @@ export const SelectProjects = () => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
         >
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <CustomButton variant="outline">
-                Projects
-                <ChevronDown />
-              </CustomButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align={"start"}>
+          <Select onValueChange={handleSelect} value={currentProjectId || undefined}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder="Select a project" />
+            </SelectTrigger>
+            <SelectContent className="w-56" align={"start"}>
               {projects.map((project) => (
-                <DropdownMenuItem key={project.id}>
+                <SelectItem value={project.id} key={project.id}>
                   {project.name}
-                </DropdownMenuItem>
+                </SelectItem>
               ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </SelectContent>
+          </Select>
         </motion.div>
       )}
     </AnimatePresence>

@@ -3,15 +3,15 @@ import useJobType from "@/hooks/use-job-type";
 import { Stars } from "lucide-react";
 import { CustomButton } from "@/components/ui/custom-button";
 import useCreateJob from "@/hooks/use-create-job";
-import {useProject} from "@/components/project-context";
+import {useCurrentProject} from "@/components/project-context";
 
-export const NextJob = ({ jobRequest }: { jobRequest: JobRequest }) => {
-  const { currentProjectId } = useProject();
+export const NextJob = ({ jobRequest, data }: { jobRequest: JobRequest, data: Record<string, unknown> }) => {
+  const { currentProjectId } = useCurrentProject();
   const { data: jobType } = useJobType(jobRequest.job_type_id);
   const {  mutateAsync: createJob } = useCreateJob();
   const handleCreateJob = async () => {
     await createJob({
-      data: jobRequest.data,
+      data,
       project_id: currentProjectId ?? undefined,
       job_type_id: jobRequest.job_type_id,
     });
@@ -30,11 +30,11 @@ export const NextJob = ({ jobRequest }: { jobRequest: JobRequest }) => {
   );
 };
 
-export const NextJobs = ({ jobs }: { jobs: JobRequest[] }) => {
+export const NextJobs = ({ jobs, data }: { jobs: JobRequest[], data: Record<string, unknown> }) => {
   return (
     <div className="flex flex-wrap gap-2">
       {jobs.map((nextJobRequest: JobRequest) => (
-        <NextJob jobRequest={nextJobRequest} key={nextJobRequest.job_type_id} />
+        <NextJob jobRequest={nextJobRequest} data={data} key={nextJobRequest.job_type_id} />
       ))}
     </div>
   );

@@ -1,9 +1,12 @@
-import PromptPage from "@/components/prompt-page";
+"use client";
+import { Home } from "@/components/home";
 
-export default function Home() {
+export default function Page() {
   return (
     <div className="h-[calc(100vh-64px)] flex flex-col bg-background text-foreground font-sans">
-      <PromptPage />
+      <div className="flex-1 flex items-center justify-center p-4">
+        <Home />
+      </div>
     </div>
   );
 }

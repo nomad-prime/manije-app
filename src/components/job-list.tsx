@@ -1,26 +1,34 @@
 "use client";
 
-import { LayoutGroup, motion } from "framer-motion";
 import "react-resizable/css/styles.css";
-import { JobRecord } from "@/hooks/use-jobs";
-import JobCard from "@/components/job-card";
+import useJobs from "@/hooks/use-jobs";
+import { ScrollArea } from "./ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { ClipboardList } from "lucide-react";
+import { ShimmerTitle } from "@/components/shimmer-title";
 
-export default function JobList({ jobs }: { jobs: JobRecord[] }) {
+export default function JobList({ projectId }: { projectId: string | null }) {
+  const { data: jobs } = useJobs(projectId);
+
   return (
-    <LayoutGroup>
-      <div className="p-6">
-        <div className="flex flex-wrap gap-4 h-full justify-center items-start lg:justify-start">
-          {jobs.map((job) => (
-            <motion.div
-              key={job.id}
-              layoutId={`tile-${job.id}`}
-              className="cursor-pointer h-full min-w-[400px] max-w-md md:max-w-2xl lg:max-w-xl xl:max-w-2xl 2xl:max-w-3xl flex-1"
+    <ScrollArea className="max-w-60 border-r">
+      <div className="p-2 space-y-2">
+        {jobs.map((job) => (
+          <Button
+            key={job.id}
+            variant="ghost"
+            className="w-full justify-start text-left hover:bg-muted relative group"
+          >
+            <ClipboardList className="mr-2 h-4 w-4" />
+            <span
+              className="overflow-hidden whitespace-nowrap text-ellipsis block max-w-[10rem]"
+              title={job.title}
             >
-              <JobCard jobId={job.id} />
-            </motion.div>
-          ))}
-        </div>
+              {job.title || <ShimmerTitle />}
+            </span>
+          </Button>
+        ))}
       </div>
-    </LayoutGroup>
+    </ScrollArea>
   );
 }

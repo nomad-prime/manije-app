@@ -10,23 +10,20 @@ import useJobType from "@/hooks/use-job-type";
 import PostJobActions from "@/components/post-job-actions";
 import { NextJobs } from "@/components/next-jobs";
 import { Label } from "@/components/ui/label";
-import { ChangeEvent, useState } from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import useUpdateJob from "@/hooks/use-update-job";
 import { useExecuteAction } from "@/hooks/use-execute-action";
 import { CustomTextarea } from "@/components/ui/custom-textarea";
-import { useProject } from "@/components/project-context";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/hooks/cache-keys";
+import { useCurrentProject } from "@/components/project-context";
 import useJob from "@/hooks/use-job";
 import { Action } from "@/hooks/use-jobs";
 
-const JobCard = ({ jobId }: { jobId: string }) => {
+const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job } = useJob({ id: jobId });
-  const { currentProjectId, setCurrentProjectId } = useProject();
+  const { currentProjectId, setCurrentProjectId } = useCurrentProject();
   const { data: jobType } = useJobType(job?.job_type_id);
   const { mutate: updateJobRecord } = useUpdateJob(job?.id);
   const { mutateAsync: executeAction } = useExecuteAction();
-  const queryClient = useQueryClient();
 
   const output = job?.output ?? {};
   const nextJobs = job?.next_jobs ?? [];
@@ -35,6 +32,12 @@ const JobCard = ({ jobId }: { jobId: string }) => {
   const [executingActions, setExecutingActions] = useState<string[]>([]);
 
   const [data, setData] = useState(output);
+
+  useEffect(() => {
+    if (job?.output) {
+      setData(job.output);
+    }
+  }, [job?.output]);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -62,13 +65,6 @@ const JobCard = ({ jobId }: { jobId: string }) => {
       if (!currentProjectId && job?.project_id) {
         setCurrentProjectId(job?.project_id);
       }
-      await queryClient.invalidateQueries({
-        queryKey: queryKeys.projects.all(),
-      });
-      if (job?.id)
-        await queryClient.invalidateQueries({
-          queryKey: queryKeys.jobs.id(job.id),
-        });
     }
   };
 
@@ -79,10 +75,10 @@ const JobCard = ({ jobId }: { jobId: string }) => {
   return (
     <Card className="h-full bg-input/30 hover:cursor-auto hover:outline">
       <CardHeader>
-        <CardTitle>{jobType?.name ?? "Job Prototype"}</CardTitle>
-        <CardDescription>
-          {jobType?.description ?? "Job Description"}
-        </CardDescription>
+        {jobType?.name && <CardTitle>{jobType?.name}</CardTitle>}
+        {jobType?.description && (
+          <CardDescription>{jobType?.description}</CardDescription>
+        )}
       </CardHeader>
 
       <CardContent className="flex flex-col gap-2 h-full">
@@ -113,7 +109,7 @@ const JobCard = ({ jobId }: { jobId: string }) => {
           />
         )}
 
-        {nextJobs.length > 0 && <NextJobs jobs={nextJobs} />}
+        {nextJobs.length > 0 && <NextJobs jobs={nextJobs} data={data} />}
       </CardFooter>
     </Card>
   );

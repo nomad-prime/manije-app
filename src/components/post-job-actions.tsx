@@ -1,12 +1,12 @@
 "use client";
 
-import { Action } from "@/hooks/useJobs";
+import { Action } from "@/hooks/use-jobs";
 import { CustomButton } from "@/components/ui/custom-button";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 
-export default function PostJobActions({
+const PostJobActions = ({
   actions,
   executingActions,
   onActionClick,
@@ -14,7 +14,7 @@ export default function PostJobActions({
   actions: Action[];
   onActionClick: (action: Action) => void;
   executingActions: string[];
-}) {
+}) => {
   return (
     <div className="flex flex-wrap gap-2 mt-2">
       <AnimatePresence initial={false}>
@@ -60,3 +60,5 @@ export default function PostJobActions({
     </div>
   );
 }
+
+export default PostJobActions;

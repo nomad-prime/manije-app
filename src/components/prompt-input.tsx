@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, ChangeEvent, KeyboardEvent } from "react";
+import { useState, useRef, ChangeEvent, KeyboardEvent, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
@@ -9,12 +9,20 @@ import { CustomTextarea } from "@/components/ui/custom-textarea";
 const PromptInput = ({
   onSubmit,
   disabled,
+  focus = true,
 }: {
   onSubmit: (prompt: string) => void;
   disabled: boolean;
+  focus?: boolean;
 }) => {
   const [value, setValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (focus && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [focus]);
 
   const handleInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);

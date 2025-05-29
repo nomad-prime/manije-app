@@ -4,7 +4,7 @@ import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 import { JobRecord } from "@/hooks/use-jobs";
 
-const useJobs = ({ id }: { id: string }) => {
+const useJobs = ({ id }: { id: string | null }) => {
   const fetchWithAuth = useAuthFetch();
   const { data, ...rest } = useQuery({
     queryKey: queryKeys.jobs.id(id),
@@ -15,6 +15,7 @@ const useJobs = ({ id }: { id: string }) => {
       }
       return response.json();
     },
+    enabled: !!id,
   });
 
   return {

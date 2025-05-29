@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
+import {JobRecord} from "@/hooks/use-jobs";
 
 type JobData = {
   [key: string]: unknown;
@@ -18,7 +19,7 @@ export default function useCreateJob() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (args: SaveJobArgs) => {
+    mutationFn: async (args: SaveJobArgs): Promise<JobRecord> => {
       const url = `${baseUrl}/jobs`;
 
       const res = await fetchWithAuth(url, {

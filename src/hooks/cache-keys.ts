@@ -1,7 +1,10 @@
 export const queryKeys = {
   jobs: {
-    all: () => ["jobs"],
-    id: (id: string) => ["job", id],
+    all: (projectId: string | null) =>
+      projectId ? ["jobs", projectId] : ["jobs"],
+    id: (id: string | null) => (id ? ["job", id] : []),
+    latest: (projectId: string | null) =>
+      projectId ? ["latestJob", projectId] : [],
   },
   jobTypes: {
     all: () => ["jobTypes"],
