@@ -4,11 +4,22 @@ import "react-resizable/css/styles.css";
 import useJobs from "@/hooks/use-jobs";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { ClipboardList } from "lucide-react";
 import { ShimmerTitle } from "@/components/shimmer-title";
+import { JobStage } from "@/components/job-stage";
+import JobListSkeleton from "@/components/job-list-skeleton";
 
-export default function JobList({ projectId }: { projectId: string | null }) {
-  const { data: jobs } = useJobs(projectId);
+const JobList = ({
+  projectId,
+  onSelect,
+}: {
+  projectId: string | null;
+  onSelect: (jobId: string) => void;
+}) => {
+  const { data: jobs, isLoading } = useJobs(projectId);
+
+  if (isLoading) {
+    return <JobListSkeleton />;
+  }
 
   return (
     <ScrollArea className="max-w-60 border-r">
@@ -18,8 +29,9 @@ export default function JobList({ projectId }: { projectId: string | null }) {
             key={job.id}
             variant="ghost"
             className="w-full justify-start text-left hover:bg-muted relative group"
+            onClick={() => onSelect(job.id)}
           >
-            <ClipboardList className="mr-2 h-4 w-4" />
+            {job?.stage && <JobStage stage={job.stage} />}
             <span
               className="overflow-hidden whitespace-nowrap text-ellipsis block max-w-[10rem]"
               title={job.title}
@@ -31,4 +43,6 @@ export default function JobList({ projectId }: { projectId: string | null }) {
       </div>
     </ScrollArea>
   );
-}
+};
+
+export default JobList;

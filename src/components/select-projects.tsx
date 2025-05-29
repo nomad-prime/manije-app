@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, SyntheticEvent } from "react";
+import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useProjects from "@/hooks/use-projects";
 import {
@@ -36,6 +36,9 @@ export const SelectProjects = () => {
               <SelectValue placeholder="Select a project" />
             </SelectTrigger>
             <SelectContent className="w-56" align={"start"}>
+              <SelectItem value="all" key="all">
+                All Projects
+              </SelectItem>
               {projects.map((project) => (
                 <SelectItem value={project.id} key={project.id}>
                   {project.name}

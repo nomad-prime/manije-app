@@ -37,10 +37,12 @@ export default function useCreateJob() {
         throw new Error(errorData.message || "Failed to send job");
       }
 
-      return await res.json();
+      const response : JobRecord = await res.json();
+      queryClient.setQueryData(queryKeys.jobs.id(response.id), response);
+      return response;
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.jobs.all() });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.jobs.all() });
     },
   });
 }

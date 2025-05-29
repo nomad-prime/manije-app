@@ -8,11 +8,13 @@ import { Manije } from "@/components/manije";
 const FloatingPromptInput = ({
   onSubmit,
   disabled,
+  initFullScreen = false,
 }: {
   onSubmit: (prompt: string) => void;
   disabled: boolean;
+  initFullScreen?: boolean;
 }) => {
-  const [fullScreen, setFullScreen] = useState(false);
+  const [fullScreen, setFullScreen] = useState(initFullScreen);
 
   const handleToggle = () => {
     setFullScreen((prev) => !prev);
