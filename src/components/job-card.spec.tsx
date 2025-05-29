@@ -56,7 +56,7 @@ describe("JobCard", () => {
         output: { summary: "Generated summary." },
         next_jobs: [],
         post_job_actions: [],
-        stage: "processing",
+        stage: "completed",
         project_id: "proj-1",
       },
     });

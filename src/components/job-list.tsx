@@ -1,6 +1,5 @@
 "use client";
 
-import "react-resizable/css/styles.css";
 import useJobs from "@/hooks/use-jobs";
 import { ScrollArea } from "./ui/scroll-area";
 import { Button } from "@/components/ui/button";
