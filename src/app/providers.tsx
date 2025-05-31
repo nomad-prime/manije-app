@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition='top-left' />
       <ProjectProvider>{children}</ProjectProvider>
     </QueryClientProvider>
   );
