@@ -1,6 +1,6 @@
 import { JobRecord } from "@/hooks/use-jobs";
 import { CustomButton } from "@/components/ui/custom-button";
-import {useEffect, useMemo, useState} from "react";
+import { useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
