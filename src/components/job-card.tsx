@@ -14,6 +14,8 @@ import { CustomTextarea } from "@/components/ui/custom-textarea";
 import useJob from "@/hooks/use-job";
 import { JobStage } from "@/components/job-stage";
 import JobCardSkeleton from "@/components/Job-Record-Skeleton";
+import JobStatusSelect from "@/components/job-status-select";
+import {notFound} from "next/navigation";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
@@ -43,6 +45,8 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
   };
 
   if (isLoadingJob || isLoadingJobType) return <JobCardSkeleton />;
+
+  if (!job) return notFound();
 
   return (
     <Card className="h-full bg-input/30 hover:cursor-auto hover:outline">
@@ -74,6 +78,7 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
           ))}
         </CardContent>
       )}
+      <JobStatusSelect job={job}/>
       <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
         {job?.stage && <JobStage stage={job.stage} label />}
       </CardFooter>

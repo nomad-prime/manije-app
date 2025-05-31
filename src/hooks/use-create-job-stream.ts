@@ -7,7 +7,6 @@ import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 import { JobRecord } from "@/hooks/use-jobs";
-import {useEffect, useRef} from "react";
 
 type JobData = {
   [key: string]: unknown;
@@ -28,27 +27,13 @@ export interface JobRecordEvent extends JobRecord {
 export default function useCreateJobStream() {
   const fetchWithAuth = useAuthFetch();
   const queryClient = useQueryClient();
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-        abortControllerRef.current = null;
-      }
-    };
-  }, []);
 
   return useMutation({
     mutationFn: async (args: SaveJobArgs): Promise<JobRecord> => {
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-
       const response = await fetchWithAuth(`${baseUrl}/jobs`, {
         method: 'POST',
         headers: { 'Accept': 'text/event-stream' },
         body: JSON.stringify(args),
-        signal: controller.signal,
       });
 
       if (!response.ok) {

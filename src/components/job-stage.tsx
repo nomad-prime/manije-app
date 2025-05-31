@@ -13,10 +13,20 @@ const JobStageIconMap: Record<
   string,
   { label: string; icon: ReactNode; color: string }
 > = {
+  validating_input: {
+    label: "Validating Input",
+    icon: <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />,
+    color: "text-yellow-500",
+  },
   pending_classification: {
     label: "Pending Classification",
     icon: <HelpCircle className="h-4 w-4 text-muted-foreground" />,
     color: "text-muted-foreground",
+  },
+  classifying: {
+    label: "Classifying",
+    icon: <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />,
+    color: "text-yellow-500",
   },
   awaiting_input: {
     label: "Awaiting Input",

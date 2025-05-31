@@ -20,6 +20,15 @@ const JobList = ({
     return <JobListSkeleton />;
   }
 
+  if (!jobs || jobs.length === 0) {
+    return (
+      <div className="p-4 text-center text-muted-foreground">
+        start working <br />
+        and magic will happen!
+      </div>
+    );
+  }
+
   return (
     <ScrollArea className="max-w-60 border-r">
       <div className="p-2 space-y-2">
