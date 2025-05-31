@@ -8,9 +8,10 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { ReactNode } from "react";
+import { JobStageType } from "@/hooks/use-jobs";
 
 const JobStageIconMap: Record<
-  string,
+  JobStageType,
   { label: string; icon: ReactNode; color: string }
 > = {
   validating_input: {
@@ -60,7 +61,7 @@ const JobStageIconMap: Record<
   },
 };
 
-const JobStage = ({ stage, label }: { stage: string; label?: boolean }) => {
+const JobStage = ({ stage, label }: { stage: JobStageType; label?: boolean }) => {
   return (
     <div className="flex items-center gap-2">
       {JobStageIconMap[stage]?.icon}

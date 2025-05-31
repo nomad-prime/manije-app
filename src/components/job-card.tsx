@@ -15,11 +15,13 @@ import useJob from "@/hooks/use-job";
 import { JobStage } from "@/components/job-stage";
 import JobCardSkeleton from "@/components/Job-Record-Skeleton";
 import JobStatusSelect from "@/components/job-status-select";
-import {notFound} from "next/navigation";
+import { notFound } from "next/navigation";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
-  const { data: jobType, isLoading: isLoadingJobType } = useJobType(job?.job_type_id || null);
+  const { data: jobType, isLoading: isLoadingJobType } = useJobType(
+    job?.job_type_id || null,
+  );
   const { mutate: updateJobRecord } = useUpdateJob(job?.id);
 
   const output = job?.output ?? {};
@@ -50,11 +52,14 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
 
   return (
     <Card className="h-full bg-input/30 hover:cursor-auto hover:outline">
-      <CardHeader>
-        {jobType?.name && <CardTitle>{jobType?.name}</CardTitle>}
-        {jobType?.description && (
-          <CardDescription>{jobType?.description}</CardDescription>
-        )}
+      <CardHeader className='flex flex-row gap-2'>
+        <div className="flex flex-col gap-1 flex-grow">
+          {jobType?.name && <CardTitle>{jobType?.name}</CardTitle>}
+          {jobType?.description && (
+            <CardDescription>{jobType?.description}</CardDescription>
+          )}
+        </div>
+        {job?.stage && <JobStage stage={job.stage} label />}
       </CardHeader>
 
       {job?.stage === "completed" && (
@@ -78,9 +83,8 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
           ))}
         </CardContent>
       )}
-      <JobStatusSelect job={job}/>
       <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
-        {job?.stage && <JobStage stage={job.stage} label />}
+        <JobStatusSelect job={job} />
       </CardFooter>
     </Card>
   );

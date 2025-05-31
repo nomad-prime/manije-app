@@ -30,6 +30,7 @@ describe("JobCard", () => {
     const mockUseJob = useJob as unknown as ReturnType<typeof vi.fn>;
     mockUseJob.mockReturnValue({
       data: null,
+      isLoading: true,
     });
 
     const mockUseJobType = useJobType as unknown as ReturnType<typeof vi.fn>;

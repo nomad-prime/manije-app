@@ -16,8 +16,8 @@ export interface JobRequest {
   data: Record<string, unknown>;
 }
 
-export type JobStage =  "pending_classification" | "classifying" | "validating_input" | "awaiting_input" | "ready_for_execution" | "processing" | "completed" | "started" | "failed";
-export type JobStatus = "draft" | "done";
+export type JobStageType =  "pending_classification" | "classifying" | "validating_input" | "awaiting_input" | "ready_for_execution" | "processing" | "completed" | "started" | "failed";
+export type JobStatusType = "draft" | "done";
 
 export interface JobRecord {
   id: string;
@@ -29,8 +29,8 @@ export interface JobRecord {
   updated_by: string;
   output?: Record<string, unknown>;
   title?: string;
-  stage: JobStage;
-  status: JobStatus;
+  stage: JobStageType;
+  status: JobStatusType;
   error_message?: string;
   project_id?: string;
 }

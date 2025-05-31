@@ -3,7 +3,7 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, it, expect, describe, beforeEach } from "vitest";
 import ProjectPage from "@/components/project-page";
 import * as nextNavigation from "next/navigation";
-import useCreateJob from "@/hooks/use-create-job";
+import useCreateJob from "@/hooks/use-create-job-stream";
 import useJob from "@/hooks/use-job";
 import useJobs from "@/hooks/use-jobs";
 import useJobType from "@/hooks/use-job-type";
@@ -13,7 +13,7 @@ vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
 }));
 
-vi.mock("@/hooks/use-create-job", () => ({
+vi.mock("@/hooks/use-create-job-stream", () => ({
   default: vi.fn(),
 }));
 

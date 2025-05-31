@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ShimmerTitle } from "@/components/shimmer-title";
 import { JobStage } from "@/components/job-stage";
 import JobListSkeleton from "@/components/job-list-skeleton";
+import {JobStatus} from "@/components/job-status";
 
 const JobList = ({
   projectId,
@@ -39,7 +40,7 @@ const JobList = ({
             className="w-full justify-start text-left hover:bg-muted relative group"
             onClick={() => onSelect(job.id)}
           >
-            {job?.stage && <JobStage stage={job.stage} />}
+            <JobStatus status={job.status} />
             <span
               className="overflow-hidden whitespace-nowrap text-ellipsis block max-w-[10rem]"
               title={job.title}

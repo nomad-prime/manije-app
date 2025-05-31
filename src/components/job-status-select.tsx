@@ -29,7 +29,7 @@ const JobStatusSelect = ({ job }: { job: JobRecord }) => {
   }, []);
 
   return (
-    <div className="flex flex-col items-end gap-2 pr-6">
+    <div className="flex flex-col items-end gap-2 ">
       <AnimatePresence mode="wait">
         <motion.p
           key={selectedMessage}
