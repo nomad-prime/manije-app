@@ -4,11 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import { JobType } from "@/components/job-type";
 import { queryKeys } from "@/hooks/cache-keys";
 
-export default function useJobType(jobTypeId?: string) {
+export default function useJobType(jobTypeId: string | null) {
   const fetchWithAuth = useAuthFetch();
 
   const { data, ...rest } = useQuery({
-    queryKey: queryKeys.jobTypes.id(jobTypeId ?? ""),
+    queryKey: queryKeys.jobTypes.id(jobTypeId),
     queryFn: async (): Promise<JobType> => {
       const response = await fetchWithAuth(
         `${baseUrl}/system/job-types/${jobTypeId}`,

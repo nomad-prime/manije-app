@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import useCreateJob from "@/hooks/use-create-job";
+import useCreateJob from "@/hooks/use-create-job-stream";
 import JobList from "@/components/job-list";
 import JobCard from "@/components/job-card";
 import FloatingPromptInput from "@/components/floating-prompt-input";

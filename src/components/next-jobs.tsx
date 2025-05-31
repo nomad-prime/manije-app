@@ -2,7 +2,7 @@ import { JobRequest } from "@/hooks/use-jobs";
 import useJobType from "@/hooks/use-job-type";
 import { Stars } from "lucide-react";
 import { CustomButton } from "@/components/ui/custom-button";
-import useCreateJob from "@/hooks/use-create-job";
+import useCreateJob from "@/hooks/use-create-job-stream";
 import {useCurrentProject} from "@/components/project-context";
 
 export const NextJob = ({ jobRequest, data }: { jobRequest: JobRequest, data: Record<string, unknown> }) => {

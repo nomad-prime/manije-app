@@ -27,34 +27,24 @@ export interface JobRecord {
   output?: Record<string, unknown>;
   title?: string;
   stage?: string;
-  post_job_actions?: Action[];
-  next_jobs?: JobRequest[];
   error_message?: string;
   project_id?: string;
 }
 
 const useJobs = (projectId: string | null) => {
   const fetchWithAuth = useAuthFetch();
-  const queryClient = useQueryClient();
-  const { data, ...rest } = useQuery({
+  return useQuery({
     queryKey: queryKeys.jobs.all(projectId),
     queryFn: async (): Promise<JobRecord[]> => {
-      const response = await fetchWithAuth(`${baseUrl}/jobs/${projectId && projectId != 'all' ? `?project_id=${projectId}` : ""}`);
+      const response = await fetchWithAuth(
+        `${baseUrl}/jobs/${projectId && projectId != "all" ? `?project_id=${projectId}` : ""}`,
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch job types");
       }
       return response.json();
     },
   });
-
-  data?.forEach((job) => {
-    queryClient.setQueryData(queryKeys.jobs.id(job.id), job);
-  });
-
-  return {
-    ...rest,
-    data: data ?? [],
-  };
 };
 
 export default useJobs;

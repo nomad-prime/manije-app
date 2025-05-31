@@ -8,7 +8,7 @@ export const queryKeys = {
   },
   jobTypes: {
     all: () => ["jobTypes"],
-    id: (id: string) => ["jobType", id],
+    id: (id: string | null) => (id ? ["jobType", id] : []),
   },
   projects: {
     all: () => ["projects"],

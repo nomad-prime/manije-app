@@ -57,7 +57,7 @@ const PromptInput = ({
           }
         }
       }}
-      className="relative w-full min-w-[600px] max-w-[800px]"
+      className="relative w-full min-w-[480px] max-w-[640px]"
     >
       <CustomTextarea
         ref={textareaRef}

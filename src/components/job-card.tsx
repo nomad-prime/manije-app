@@ -17,7 +17,7 @@ import JobCardSkeleton from "@/components/Job-Record-Skeleton";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
-  const { data: jobType, isLoading: isLoadingJobType } = useJobType(job?.job_type_id);
+  const { data: jobType, isLoading: isLoadingJobType } = useJobType(job?.job_type_id || null);
   const { mutate: updateJobRecord } = useUpdateJob(job?.id);
 
   const output = job?.output ?? {};

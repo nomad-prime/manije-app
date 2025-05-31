@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import useCreateJob from "@/hooks/use-create-job";
+import useCreateJob from "@/hooks/use-create-job-stream";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import PromptInput from "@/components/prompt-input";
 
@@ -11,7 +11,7 @@ export const Home = () => {
   const createJob = async (prompt: string) => {
     try {
       const response = await mutateAsync({ data: { input: prompt } });
-      router.replace(`/projects/all/jobs/${response.id}`);
+      router.push(`/projects/all/jobs/${response.id}`);
     } catch (error) {
       console.error("Error creating job:", error);
     }
