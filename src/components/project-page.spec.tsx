@@ -64,7 +64,7 @@ describe("ProjectPage", () => {
         id: "job456",
         job_type_id: "jt1",
         output: { summary: "LLM output summary" },
-        stage: "completed",
+        stage: "ready",
       },
       isLoading: false,
     });
@@ -75,7 +75,7 @@ describe("ProjectPage", () => {
           id: "job456",
           job_type_id: "jt1",
           title: "Some Job Title",
-          stage: "completed",
+          stage: "ready",
         },
       ],
       isLoading: false,

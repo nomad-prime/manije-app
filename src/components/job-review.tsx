@@ -3,6 +3,7 @@ import { CustomButton } from "@/components/ui/custom-button";
 import { useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import useAcceptJob from "@/hooks/use-accept-job";
 
 const rotatingMessages = [
   "Feel free to make changes. Otherwise ⬇️",
@@ -17,16 +18,25 @@ const rotatingMessages = [
   "Does this feel right? If so, you know what to do 👇",
 ];
 
-const JobStatusSelect = ({ job }: { job: JobRecord }) => {
+const JobReview = ({ job }: { job: JobRecord }) => {
   const jobStage = job.stage;
-  const jobStatus = job.status;
 
-  const isCompleted = jobStage === "completed" && jobStatus === "draft";
+  const isReady = jobStage === "ready_for_review";
 
   const selectedMessage = useMemo(() => {
     const index = Math.floor(Math.random() * rotatingMessages.length);
     return rotatingMessages[index];
   }, []);
+
+  const { mutateAsync } = useAcceptJob({ jobId: job.id });
+
+  const handleDoneClick = async () => {
+    try {
+      await mutateAsync();
+    } catch (error) {
+      console.error("Error marking job as done:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-end gap-2 ">
@@ -42,12 +52,8 @@ const JobStatusSelect = ({ job }: { job: JobRecord }) => {
           {selectedMessage}
         </motion.p>
       </AnimatePresence>
-      {isCompleted && (
-        <CustomButton
-          size="sm"
-          variant="default"
-          onClick={() => alert("Job is completed!")}
-        >
+      {isReady && (
+        <CustomButton size="sm" variant="default" onClick={handleDoneClick}>
           Done
         </CustomButton>
       )}
@@ -55,4 +61,4 @@ const JobStatusSelect = ({ job }: { job: JobRecord }) => {
   );
 };
 
-export default JobStatusSelect;
+export default JobReview;

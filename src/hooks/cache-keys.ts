@@ -14,4 +14,12 @@ export const queryKeys = {
     all: () => ["projects"],
     id: (id: string) => ["project", id],
   },
+  actions: {
+    all: () => ["actions"],
+    id: (id: string | null) => (id ? ["action", id] : []),
+  },
+  nextJobs: {
+    all: (jobId: string | null) => (jobId ? ["nextJobs", jobId] : []),
+    id: (id: string | null) => (id ? ["nextJob", id] : []),
+  }
 };

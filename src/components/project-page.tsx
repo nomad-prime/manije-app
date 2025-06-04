@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import useCreateJob from "@/hooks/use-create-job-stream";
+import useCreateJobStream from "@/hooks/use-create-job-stream";
 import JobList from "@/components/job-list";
 import JobCard from "@/components/job-card";
 import FloatingPromptInput from "@/components/floating-prompt-input";
@@ -22,7 +22,7 @@ export default function ProjectPage() {
     }
   }, [paramJobId]);
 
-  const { mutateAsync, isPending } = useCreateJob();
+  const { mutateAsync, isPending } = useCreateJobStream();
 
   const handlePrompt = async (input: string) => {
     const newJob = await mutateAsync({

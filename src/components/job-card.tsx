@@ -14,8 +14,9 @@ import { CustomTextarea } from "@/components/ui/custom-textarea";
 import useJob from "@/hooks/use-job";
 import { JobStage } from "@/components/job-stage";
 import JobCardSkeleton from "@/components/Job-Record-Skeleton";
-import JobStatusSelect from "@/components/job-status-select";
+import JobReview from "@/components/job-review";
 import { notFound } from "next/navigation";
+import PostJobActions from "@/components/post-job-actions";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
@@ -52,7 +53,7 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
 
   return (
     <Card className="h-full bg-input/30 hover:cursor-auto hover:outline">
-      <CardHeader className='flex flex-row gap-2'>
+      <CardHeader className="flex flex-row gap-2">
         <div className="flex flex-col gap-1 flex-grow">
           {jobType?.name && <CardTitle>{jobType?.name}</CardTitle>}
           {jobType?.description && (
@@ -62,30 +63,60 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
         {job?.stage && <JobStage stage={job.stage} label />}
       </CardHeader>
 
-      {job?.stage === "completed" && (
-        <CardContent className="flex flex-col gap-2">
-          {Object.entries(data).map(([key, value]) => (
-            <div key={key} className="flex flex-col gap-2 h-full">
-              <Label htmlFor={`output-${key}`} className="mt-2">
-                {key}
-              </Label>
-              <CustomTextarea
-                id={`output-${key}`}
-                name={key}
-                className="resize-none overflow-auto"
-                value={
-                  typeof value === "string" ? value : JSON.stringify(value)
-                }
-                onChange={handleChange}
-                onBlur={handleSave}
-              />
-            </div>
-          ))}
-        </CardContent>
+      {job?.stage === "ready_for_review" && (
+        <>
+          <CardContent className="flex flex-col gap-2">
+            {Object.entries(data).map(([key, value]) => (
+              <div key={key} className="flex flex-col gap-2 h-full">
+                <Label htmlFor={`output-${key}`} className="mt-2">
+                  {key}
+                </Label>
+                <CustomTextarea
+                  id={`output-${key}`}
+                  name={key}
+                  className="resize-none overflow-auto"
+                  value={
+                    typeof value === "string" ? value : JSON.stringify(value)
+                  }
+                  onChange={handleChange}
+                  onBlur={handleSave}
+                />
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
+            <JobReview job={job} />
+          </CardFooter>
+        </>
       )}
-      <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
-        <JobStatusSelect job={job} />
-      </CardFooter>
+      {job?.stage === "ready_for_actions" && (
+        <>
+          <CardContent className="flex flex-col gap-2">
+            {Object.entries(data).map(([key, value]) => (
+              <div key={key} className="flex flex-col gap-2 h-full">
+                <Label
+                  htmlFor={`output-${key}`}
+                  className="mt-2 text-muted-foreground"
+                >
+                  {key}
+                </Label>
+                <p className="resize-none overflow-auto text-sm">
+                  {typeof value === "string" ? value : JSON.stringify(value)}
+                </p>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
+            <PostJobActions
+              actions={job.actions || []}
+              executingActions={[]}
+              onActionClick={(action) => {
+                console.log("Action clicked:", action);
+              }}
+            />
+          </CardFooter>
+        </>
+      )}
     </Card>
   );
 };

@@ -5,7 +5,7 @@ import {
   CheckCircle2,
   Rocket,
   XCircle,
-  HelpCircle,
+  HelpCircle, Target,
 } from "lucide-react";
 import { ReactNode } from "react";
 import { JobStageType } from "@/hooks/use-jobs";
@@ -14,6 +14,16 @@ const JobStageIconMap: Record<
   JobStageType,
   { label: string; icon: ReactNode; color: string }
 > = {
+  completed: {
+    label: "Validating Input",
+    icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
+    color: "text-green-500",
+  },
+  ready_for_actions: {
+    label: "Ready For Actions",
+    icon: <Target className="h-4 w-4 text-blue-500" />,
+    color: "text-blue-500",
+  },
   validating_input: {
     label: "Validating Input",
     icon: <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />,
@@ -29,8 +39,8 @@ const JobStageIconMap: Record<
     icon: <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />,
     color: "text-yellow-500",
   },
-  awaiting_input: {
-    label: "Awaiting Input",
+  awaiting_user_feedback: {
+    label: "Awaiting Feedback",
     icon: <Pencil className="h-4 w-4 text-yellow-500" />,
     color: "text-yellow-500",
   },
@@ -44,8 +54,13 @@ const JobStageIconMap: Record<
     icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
     color: "text-purple-500",
   },
-  completed: {
-    label: "Completed",
+  post_processing: {
+    label: "Processing",
+    icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
+    color: "text-purple-500",
+  },
+  ready_for_review: {
+    label: "Ready For Review",
     icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
     color: "text-green-500",
   },
@@ -61,7 +76,13 @@ const JobStageIconMap: Record<
   },
 };
 
-const JobStage = ({ stage, label }: { stage: JobStageType; label?: boolean }) => {
+const JobStage = ({
+  stage,
+  label,
+}: {
+  stage: JobStageType;
+  label?: boolean;
+}) => {
   return (
     <div className="flex items-center gap-2">
       {JobStageIconMap[stage]?.icon}

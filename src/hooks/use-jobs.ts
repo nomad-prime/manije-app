@@ -16,8 +16,19 @@ export interface JobRequest {
   data: Record<string, unknown>;
 }
 
-export type JobStageType =  "pending_classification" | "classifying" | "validating_input" | "awaiting_input" | "ready_for_execution" | "processing" | "completed" | "started" | "failed";
-export type JobStatusType = "draft" | "done";
+export type JobStageType = "pending_classification"
+  |"classifying"
+  |"validating_input"
+  |"awaiting_user_feedback"
+  |"ready_for_execution"
+  |"processing"
+  |"post_processing"
+  |"ready_for_review"
+  |"ready_for_actions"
+  |"started"
+  |"failed"
+  |"completed"
+
 
 export interface JobRecord {
   id: string;
@@ -30,9 +41,9 @@ export interface JobRecord {
   output?: Record<string, unknown>;
   title?: string;
   stage: JobStageType;
-  status: JobStatusType;
   error_message?: string;
   project_id?: string;
+  actions?: Action[];
 }
 
 const useJobs = (projectId: string | null) => {

@@ -17,7 +17,7 @@ const PostJobActions = ({
 }) => {
   return (
     <div className="flex flex-wrap gap-2 mt-2">
-      <AnimatePresence initial={false}>
+      <AnimatePresence>
         {actions.map((action) => {
           const isExecuting = executingActions.includes(action.name);
           const show = !action.executed || isExecuting;
