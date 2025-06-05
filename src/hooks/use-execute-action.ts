@@ -4,13 +4,11 @@ import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 
 export type ActionArgs = {
-  data: unknown;
-  action: string;
-  job_record_id?: string;
+  id: string;
+  job_record_id: string;
 };
 
 export type ActionResult = {
-  data: Record<string, unknown>;
   job_record_id?: string;
   keys: string[];
 };
@@ -21,15 +19,16 @@ export const useExecuteAction = () => {
 
   return useMutation({
     mutationFn: async ({
-      data,
-      action,
+      id,
       job_record_id,
     }: ActionArgs): Promise<ActionResult> => {
-      const url = `${baseUrl}/actions`;
+      const url = `${baseUrl}/actions/${id}`;
 
       const res = await fetchWithAuth(url, {
         method: "POST",
-        body: JSON.stringify({ action, data, job_record_id }),
+        body: JSON.stringify({
+          job_record_id,
+        })
       });
 
       if (!res.ok) {
@@ -40,8 +39,8 @@ export const useExecuteAction = () => {
       const response = await res.json();
       return {
         ...response,
-        job_record_id: job_record_id,
-      };
+        job_record_id
+      }
     },
     onSuccess: async (result) => {
       await queryClient.invalidateQueries({

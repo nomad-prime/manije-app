@@ -8,19 +8,17 @@ import { Check } from "lucide-react";
 
 const PostJobActions = ({
   actions,
-  executingActions,
   onActionClick,
 }: {
   actions: Action[];
   onActionClick: (action: Action) => void;
-  executingActions: string[];
 }) => {
+
   return (
     <div className="flex flex-wrap gap-2 mt-2">
       <AnimatePresence>
         {actions.map((action) => {
-          const isExecuting = executingActions.includes(action.name);
-          const show = !action.executed || isExecuting;
+          const show = !action.executed;
 
           return (
             show && (
@@ -36,12 +34,11 @@ const PostJobActions = ({
                   size="sm"
                   variant="secondary"
                   onClick={() => onActionClick(action)}
-                  disabled={isExecuting || action.executed}
-                  loading={isExecuting}
+                  disabled={action.executed}
                   nudge
                   className={cn(
                     "relative overflow-hidden",
-                    (isExecuting || action.executed) && "pointer-events-none",
+                    (action.executed) && "pointer-events-none",
                   )}
                 >
                   <span className="z-10 relative flex items-center gap-1">
@@ -59,6 +56,6 @@ const PostJobActions = ({
       </AnimatePresence>
     </div>
   );
-}
+};
 
 export default PostJobActions;

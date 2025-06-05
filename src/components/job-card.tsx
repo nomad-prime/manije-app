@@ -17,6 +17,8 @@ import JobCardSkeleton from "@/components/Job-Record-Skeleton";
 import JobReview from "@/components/job-review";
 import { notFound } from "next/navigation";
 import PostJobActions from "@/components/post-job-actions";
+import { useExecuteAction } from "@/hooks/use-execute-action";
+import { Action } from "@/hooks/use-jobs";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
@@ -24,6 +26,7 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
     job?.job_type_id || null,
   );
   const { mutate: updateJobRecord } = useUpdateJob(job?.id);
+  const { mutate: executeAction } = useExecuteAction();
 
   const output = job?.output ?? {};
 
@@ -45,6 +48,14 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
 
   const handleSave = async () => {
     updateJobRecord({ output: data });
+  };
+
+  const handleActionClick = (action: Action) => {
+    if (!job?.id) return;
+    executeAction({
+      id: action.id,
+      job_record_id: job.id,
+    });
   };
 
   if (isLoadingJob || isLoadingJobType) return <JobCardSkeleton />;
@@ -100,7 +111,7 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
                 >
                   {key}
                 </Label>
-                <p className="resize-none overflow-auto text-sm">
+                <p className="resize-none overflow-auto text-sm border px-3 py-3 rounded-lg text-justify">
                   {typeof value === "string" ? value : JSON.stringify(value)}
                 </p>
               </div>
@@ -109,10 +120,7 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
           <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
             <PostJobActions
               actions={job.actions || []}
-              executingActions={[]}
-              onActionClick={(action) => {
-                console.log("Action clicked:", action);
-              }}
+              onActionClick={handleActionClick}
             />
           </CardFooter>
         </>
