@@ -15,18 +15,29 @@ import useJob from "@/hooks/use-job";
 import { JobStage } from "@/components/job-stage";
 import JobCardSkeleton from "@/components/Job-Record-Skeleton";
 import JobReview from "@/components/job-review";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import PostJobActions from "@/components/post-job-actions";
-import { useExecuteAction } from "@/hooks/use-execute-action";
+import { ActionOutcome, useExecuteAction } from "@/hooks/use-execute-action";
 import { Action } from "@/hooks/use-jobs";
+import { toast } from "sonner";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
   const { data: jobType, isLoading: isLoadingJobType } = useJobType(
     job?.job_type_id || null,
   );
+
+  const { push } = useRouter();
+
   const { mutate: updateJobRecord } = useUpdateJob(job?.id);
-  const { mutate: executeAction } = useExecuteAction();
+  const { mutate: executeAction } = useExecuteAction({
+    onSuccess: (outcome: ActionOutcome) => {
+      toast.success(outcome.message);
+      if (outcome.redirect_to) {
+        push(outcome.redirect_to);
+      }
+    },
+  });
 
   const output = job?.output ?? {};
 

@@ -10,6 +10,7 @@ import { dark } from "@clerk/themes";
 import Providers from "@/app/providers";
 import HeaderUserButton from "@/components/header-user-button";
 import { SelectProjects } from "@/components/select-projects";
+import { Toaster } from "@/components/ui/sonner"
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-sans",
@@ -75,6 +76,7 @@ export default function RootLayout({
               <main className="flex-1">
                 {children}
               </main>
+              <Toaster />
             </ThemeProvider>
           </Providers>
         </ClerkProvider>

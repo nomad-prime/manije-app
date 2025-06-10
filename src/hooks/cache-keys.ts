@@ -12,7 +12,7 @@ export const queryKeys = {
   },
   projects: {
     all: () => ["projects"],
-    id: (id: string) => ["project", id],
+    id: (id: string | null) => (id ? ["project", id] : []),
   },
   actions: {
     all: () => ["actions"],
