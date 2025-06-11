@@ -1,10 +1,9 @@
 "use client";
 
 import { useProject } from "@/hooks/use-project";
-import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-import { CustomButton } from "@/components/ui/custom-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {NextJobs} from "@/components/next-jobs";
 
 interface ProjectOverviewProps {
   projectId: string | null;
@@ -32,9 +31,9 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
     <div className="px-10 pt-10 max-w-3xl">
       <motion.h1
         className="text-3xl font-bold text-foreground mb-2"
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
       >
         {project.name}
       </motion.h1>
@@ -51,26 +50,11 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
         What’s next
       </motion.h2>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <CustomButton
-          variant="outline"
-          className="group relative p-2"
-          nudge
-          onClick={() => console.log("Define key requirements")}
-        >
-          <Sparkles />
-          Start Stakeholder Analysis
-        </CustomButton>
-        <CustomButton
-          variant="outline"
-          className="group relative p-2"
-          nudge
-          onClick={() => console.log("Define key requirements")}
-        >
-          <Sparkles />
-          Define Requirements
-        </CustomButton>
-      </div>
+      {projectId &&
+        <div className="flex flex-col sm:flex-row gap-4">
+          <NextJobs projectId={projectId} />
+        </div>
+      }
     </div>
   );
 };

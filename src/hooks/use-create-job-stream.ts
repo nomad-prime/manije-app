@@ -12,8 +12,9 @@ type JobData = {
   [key: string]: unknown;
 };
 
-type SaveJobArgs = {
-  data: JobData;
+type CreateJobArgs = {
+  next_job_id?: string;
+  data?: JobData;
   project_id?: string;
   job_type_id?: string;
 };
@@ -32,12 +33,23 @@ export default function useCreateJobStream() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (args: SaveJobArgs): Promise<JobRecord> => {
-      const response = await fetchWithAuth(`${baseUrl}/jobs`, {
-        method: "POST",
-        headers: { Accept: "text/event-stream" },
-        body: JSON.stringify(args),
-      });
+    mutationFn: async (args: CreateJobArgs): Promise<JobRecord> => {
+      let response;
+      if (args.next_job_id)
+        response = await fetchWithAuth(
+          `${baseUrl}/jobs/next/${args.next_job_id}`,
+          {
+            method: "POST",
+            headers: { Accept: "text/event-stream" },
+          },
+        );
+      else
+        response = await fetchWithAuth(`${baseUrl}/jobs`, {
+          method: "POST",
+          headers: { Accept: "text/event-stream" },
+          body: JSON.stringify(args),
+        });
+
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
