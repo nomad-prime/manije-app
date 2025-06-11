@@ -4,6 +4,8 @@ import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 
 export interface Project {
+  open_jobs: number;
+  done_jobs: number;
   id: string;
   name: string;
 }

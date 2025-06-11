@@ -11,6 +11,7 @@ import Providers from "@/app/providers";
 import HeaderUserButton from "@/components/header-user-button";
 import { SelectProjects } from "@/components/select-projects";
 import { Toaster } from "@/components/ui/sonner"
+import AppHeader from "@/components/header";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-sans",
@@ -40,33 +41,7 @@ export default function RootLayout({
           waitlistUrl={"/waitlist"}
         >
           <Providers>
-            <header className="flex justify-between items-center p-4 h-16 border-b gap-4">
-              <Link
-                href="/"
-                className="text-xl font-semibold text-white hover:opacity-80 transition"
-              >
-                <Image
-                  src="/logo_light.png"
-                  alt="Manije logo"
-                  width={28}
-                  height={28}
-                  priority
-                  className="block dark:hidden"
-                />
-                <Image
-                  src="/logo_dark.png"
-                  alt="Manije logo"
-                  width={28}
-                  height={28}
-                  priority
-                  className="hidden dark:block"
-                />
-              </Link>
-              <div className="flex flex-row items-start gap-4 flex-2">
-                <SelectProjects />
-              </div>
-              <HeaderUserButton />
-            </header>
+            <AppHeader />
             <ThemeProvider
               attribute="class"
               defaultTheme="system"

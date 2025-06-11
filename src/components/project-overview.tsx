@@ -3,7 +3,7 @@
 import { useProject } from "@/hooks/use-project";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import {NextJobs} from "@/components/next-jobs";
+import { NextJobs } from "@/components/next-jobs";
 
 interface ProjectOverviewProps {
   projectId: string | null;
@@ -37,9 +37,14 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
       >
         {project.name}
       </motion.h1>
-      <p className="text-muted-foreground mb-10 leading-relaxed">
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="text-muted-foreground mb-10 leading-relaxed"
+      >
         {project.description}
-      </p>
+      </motion.p>
 
       <motion.h2
         className="text-2xl font-semibold mb-4"
@@ -50,11 +55,16 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
         What’s next
       </motion.h2>
 
-      {projectId &&
-        <div className="flex flex-col sm:flex-row gap-4">
+      {projectId && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="flex flex-col sm:flex-row gap-4"
+        >
           <NextJobs projectId={projectId} />
-        </div>
-      }
+        </motion.div>
+      )}
     </div>
   );
 };
