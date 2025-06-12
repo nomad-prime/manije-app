@@ -1,3 +1,5 @@
+"use client";
+
 import { Stars } from "lucide-react";
 import { CustomButton } from "@/components/ui/custom-button";
 import useCreateJob from "@/hooks/use-create-job-stream";
@@ -5,13 +7,25 @@ import useNextJobs, { NextJob as NextJobType } from "@/hooks/use-next-jobs";
 import useJobType from "@/hooks/use-job-type";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
+import {useQueryClient} from "@tanstack/react-query";
+import {queryKeys} from "@/hooks/cache-keys";
 
 export const NextJob = ({ nextJob }: { nextJob: NextJobType }) => {
   const { data: jobType } = useJobType(nextJob.job_type_id);
   const { mutateAsync: createJob } = useCreateJob();
+  const queryClient = useQueryClient();
   const handleCreateJob = async () => {
-    await createJob({
+    const newJob = await createJob({
       job_type_id: nextJob.job_type_id,
+      next_job_id: nextJob.id,
+    });
+    window.history.pushState(
+      {},
+      "",
+      `/projects/${nextJob.project_id}/jobs/${newJob.id}`,
+    );
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.jobs.all(nextJob.project_id),
     });
   };
 
@@ -31,7 +45,6 @@ export const NextJob = ({ nextJob }: { nextJob: NextJobType }) => {
 export const NextJobs = ({ projectId }: { projectId: string }) => {
   const { data: nextJobs, isLoading } = useNextJobs({ projectId });
 
-  // loading state with skeletons <Skeleton className="h-8 w-1/2" />
   if (isLoading) {
     return (
       <div className="flex flex-wrap gap-2">

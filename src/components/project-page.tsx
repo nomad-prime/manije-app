@@ -1,26 +1,19 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import useCreateJobStream from "@/hooks/use-create-job-stream";
 import JobList from "@/components/job-list";
 import JobCard from "@/components/job-card";
 import FloatingPromptInput from "@/components/floating-prompt-input";
-import { useEffect, useState } from "react";
 import { ProjectOverview } from "@/components/project-overview";
 
 export default function ProjectPage() {
-  const { slugs } = useParams() as { slugs?: string[] };
+  const pathname = usePathname();
 
-  const projectId = slugs?.[0] as string;
-  const paramJobId = slugs?.[1] === "jobs" ? slugs?.[2] : null;
+  const segments = pathname.split("/").filter(Boolean);
+  const projectId = segments[1];
 
-  const [jobId, setJobId] = useState<string | null>(paramJobId ?? null);
-
-  useEffect(() => {
-    if (paramJobId) {
-      setJobId(paramJobId);
-    }
-  }, [paramJobId]);
+  const jobId = segments[2] === "jobs" ? segments[3] : null;
 
   const { mutateAsync, isPending } = useCreateJobStream();
 
@@ -28,7 +21,7 @@ export default function ProjectPage() {
     const newJob = await mutateAsync({
       data: { input, projectId },
     });
-    setJobId(newJob.id);
+
     window.history.pushState(
       {},
       "",
@@ -37,7 +30,6 @@ export default function ProjectPage() {
   };
 
   const handleSelect = (jobId: string) => {
-    setJobId(jobId);
     window.history.pushState({}, "", `/projects/${projectId}/jobs/${jobId}`);
   };
 
