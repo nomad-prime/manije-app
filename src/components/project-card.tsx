@@ -14,7 +14,7 @@ export function ProjectCard({
   return (
     <Link
       href={`/projects/${project.id}`}
-      className="bg-muted hover:bg-muted/80 transition border rounded-xl p-4 w-64 flex flex-col justify-between"
+      className="bg-muted hover:bg-muted/80 transition border rounded-xl p-4 max-w-64 min-w-32 flex flex-col justify-between"
     >
       <div className="flex items-center gap-2 mb-4">
         <div>
