@@ -11,9 +11,9 @@ export interface Action {
   executed: boolean;
 }
 
-export interface JobRequest {
-  job_type_id: string;
-  data: Record<string, unknown>;
+export interface ChatMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
 }
 
 export type JobStageType = "pending_classification"
@@ -38,19 +38,46 @@ export interface JobRecord {
   updated_at: string;
   created_by: string;
   updated_by: string;
-  output?: Record<string, unknown>;
   title?: string;
-  stage: JobStageType;
   error_message?: string;
   project_id?: string;
-  actions?: Action[];
 }
+
+export interface ConversationJobRecord extends JobRecord {
+  messages: ChatMessage[];
+  stage: "awaiting_user_feedback";
+}
+
+export interface ReviewJobRecord extends JobRecord {
+  output: Record<string, unknown>;
+  stage: "ready_for_review";
+}
+
+export interface ActionJobRecord extends JobRecord {
+  output: Record<string, unknown>;
+  actions: Action[];
+  stage: "ready_for_actions";
+}
+
+interface GenericJobRecord extends JobRecord {
+  stage: Exclude<
+    JobStageType,
+    "ready_for_review" | "ready_for_actions" | "awaiting_user_feedback"
+  >;
+}
+
+
+export type AnyJobRecord =
+  | GenericJobRecord
+  | ConversationJobRecord
+  | ReviewJobRecord
+  | ActionJobRecord;
 
 const useJobs = (projectId: string | null) => {
   const fetchWithAuth = useAuthFetch();
   return useQuery({
     queryKey: queryKeys.jobs.all(projectId),
-    queryFn: async (): Promise<JobRecord[]> => {
+    queryFn: async (): Promise<AnyJobRecord[]> => {
       const response = await fetchWithAuth(
         `${baseUrl}/jobs/${projectId && projectId != "all" ? `?project_id=${projectId}` : ""}`,
       );

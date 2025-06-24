@@ -5,15 +5,20 @@ import { useState, useRef, ChangeEvent, KeyboardEvent, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
 import { CustomTextarea } from "@/components/ui/custom-textarea";
+import { cn } from "@/lib/utils";
 
 const PromptInput = ({
   onSubmit,
   disabled,
+  placeholder = "Let's start...",
   focus = true,
+  className = "",
 }: {
   onSubmit: (prompt: string) => void;
   disabled: boolean;
+  placeholder?: string;
   focus?: boolean;
+  className?: string;
 }) => {
   const [value, setValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -57,14 +62,14 @@ const PromptInput = ({
           }
         }
       }}
-      className="relative w-full min-w-[480px] max-w-[640px]"
+      className={cn("relative w-full min-w-[480px]", className)}
     >
       <CustomTextarea
         ref={textareaRef}
         value={value}
         onChange={handleInput}
         onKeyDown={handleKeyDown}
-        placeholder="Let's start..."
+        placeholder={placeholder}
         disabled={disabled}
         className="w-full resize-none max-h-[300px] overflow-auto px-4 py-3 pr-16"
       />

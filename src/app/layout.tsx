@@ -3,13 +3,9 @@ import { Space_Grotesk, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/components/theme-provider";
-import Link from "next/link";
-import Image from "next/image";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import Providers from "@/app/providers";
-import HeaderUserButton from "@/components/header-user-button";
-import { SelectProjects } from "@/components/select-projects";
 import { Toaster } from "@/components/ui/sonner"
 import AppHeader from "@/components/header";
 

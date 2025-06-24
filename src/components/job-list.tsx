@@ -42,7 +42,7 @@ const JobList = ({
               className="overflow-hidden whitespace-nowrap text-ellipsis block max-w-[10rem]"
               title={job.title}
             >
-              {job.title || <ShimmerTitle />}
+              {job.title || <ShimmerTitle text={"working on it..."} />}
             </span>
           </Button>
         ))}

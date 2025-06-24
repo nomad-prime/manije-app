@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
-import { JobRecord } from "@/hooks/use-jobs";
+import { AnyJobRecord } from "@/hooks/use-jobs";
 
 const useJob = ({ id }: { id: string | null }) => {
   const fetchWithAuth = useAuthFetch();
   const { data, ...rest } = useQuery({
     queryKey: queryKeys.jobs.id(id),
-    queryFn: async (): Promise<JobRecord> => {
+    queryFn: async (): Promise<AnyJobRecord> => {
       const response = await fetchWithAuth(`${baseUrl}/jobs/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch job types");
@@ -20,7 +20,7 @@ const useJob = ({ id }: { id: string | null }) => {
 
   return {
     ...rest,
-    data
+    data,
   };
 };
 
