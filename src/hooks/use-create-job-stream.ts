@@ -1,12 +1,9 @@
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 import { JobRecord } from "@/hooks/use-jobs";
+import { readStream } from "@/lib/stream";
 
 type JobData = {
   [key: string]: unknown;
@@ -18,9 +15,6 @@ type CreateJobArgs = {
   project_id?: string;
   job_type_id?: string;
 };
-
-const DATA_PREFIX = "data: ";
-const DATA_PREFIX_LENGTH = DATA_PREFIX.length;
 
 type JobRecordEventType = "job_created" | "job_updated";
 
@@ -50,7 +44,6 @@ export default function useCreateJobStream() {
           body: JSON.stringify(args),
         });
 
-
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -59,70 +52,21 @@ export default function useCreateJobStream() {
         throw new Error("No response body");
       }
 
-      const textStream = response.body
-        .pipeThrough(new TextDecoderStream())
-        .pipeThrough(
-          new TransformStream({
-            transform(chunk, controller) {
-              const lines = chunk.split("\n");
-              for (const line of lines) {
-                if (line.startsWith(DATA_PREFIX)) {
-                  try {
-                    const eventData = JSON.parse(
-                      line.slice(DATA_PREFIX_LENGTH),
-                    );
-                    controller.enqueue(eventData);
-                  } catch (error) {
-                    console.error("Error parsing SSE event:", error);
-                  }
-                }
-              }
-            },
-          }),
-        );
-
-      const reader = textStream.getReader();
-
-      const firstEvent = await reader.read();
-      if (firstEvent.done) {
-        throw new Error("No events received");
-      }
-
-      const firstEventData = firstEvent.value;
-      if (firstEventData.type !== "job_created") {
-        throw new Error("First event was not job_created");
-      }
-
-      const jobRecord = firstEventData as JobRecordEvent;
-
-      queryClient.setQueryData(queryKeys.jobs.id(jobRecord.id), jobRecord);
-
-      processRemainingEvents(reader, queryClient, jobRecord.id);
-
-      return jobRecord;
+      return await readStream<JobRecordEvent>(
+        response,
+        {
+          onEvent: (event) => {
+            queryClient.setQueryData<JobRecord>(
+              queryKeys.jobs.id(event.id),
+              event,
+            );
+          },
+          onDone: () => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.jobs.all() });
+          },
+          createEventName: "job_created",
+        }
+      );
     },
   });
 }
-
-const processRemainingEvents = async (
-  reader: ReadableStreamDefaultReader<JobRecordEvent>,
-  queryClient: QueryClient,
-  jobId: string,
-) => {
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        queryClient.invalidateQueries({ queryKey: queryKeys.jobs.all() });
-        break;
-      }
-
-      const jobRecord = value as JobRecordEvent;
-
-      queryClient.setQueryData(queryKeys.jobs.id(jobId), jobRecord);
-    }
-  } catch (error) {
-    queryClient.invalidateQueries({ queryKey: queryKeys.jobs.all() });
-    console.error("Error processing remaining events:", error);
-  }
-};

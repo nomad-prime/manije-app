@@ -33,7 +33,11 @@ export const Home = () => {
             transition={{ duration: 0.4, delay: 0.2 }}
             layoutId="prompt"
           >
-            <PromptInput onSubmit={createJob} disabled={isPending} />
+            <PromptInput
+              onSubmit={createJob}
+              disabled={isPending}
+              className="w-[640px] max-w-[640px]"
+            />
           </motion.div>
         </div>
       </AnimatePresence>

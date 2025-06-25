@@ -30,8 +30,8 @@ const JobStageIconMap: Record<
     color: "text-yellow-500",
   },
   pending_classification: {
-    label: "Pending Classification",
-    icon: <HelpCircle className="h-4 w-4 text-muted-foreground" />,
+    label: "Classifying",
+    icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
     color: "text-muted-foreground",
   },
   classifying: {
@@ -63,6 +63,11 @@ const JobStageIconMap: Record<
     label: "Ready For Review",
     icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
     color: "text-green-500",
+  },
+  conversing: {
+    label: "Conversing",
+    icon: <Pencil className="h-4 w-4 text-yellow-500" />,
+    color: "text-yellow-500",
   },
   started: {
     label: "Started",

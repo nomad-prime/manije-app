@@ -38,7 +38,7 @@ export default function ProjectPage() {
       <JobList projectId={projectId} onSelect={handleSelect} />
       {jobId && (
         <div className="flex-1 flex flex-col justify-center">
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto py-4">
             <JobCard jobId={jobId} />
           </div>
         </div>

@@ -25,6 +25,7 @@ export type JobStageType = "pending_classification"
   |"post_processing"
   |"ready_for_review"
   |"ready_for_actions"
+  |"conversing"
   |"started"
   |"failed"
   |"completed"
@@ -45,7 +46,7 @@ export interface JobRecord {
 
 export interface ConversationJobRecord extends JobRecord {
   messages: ChatMessage[];
-  stage: "awaiting_user_feedback";
+  stage: "awaiting_user_feedback" | "conversing";
 }
 
 export interface ReviewJobRecord extends JobRecord {

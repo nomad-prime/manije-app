@@ -34,8 +34,8 @@ const ReviewJobCard = ({ job }: ReviewJobCardProps) => {
   };
 
   return (
-    <>
-      <CardContent className="flex flex-col gap-2">
+    <div className='p-1'>
+      <div className="flex flex-col gap-4 px-4">
         {Object.entries(data).map(([key, value]) => (
           <div key={key} className="flex flex-col gap-2">
             <Label htmlFor={`output-${key}`} className="mt-2">
@@ -51,11 +51,11 @@ const ReviewJobCard = ({ job }: ReviewJobCardProps) => {
             />
           </div>
         ))}
-      </CardContent>
-      <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4">
+      </div>
+      <CardFooter className="flex flex-col items-end gap-4 px-6 pb-4 mt-4">
         <JobReview job={job} />
       </CardFooter>
-    </>
+    </div>
   );
 };
 
