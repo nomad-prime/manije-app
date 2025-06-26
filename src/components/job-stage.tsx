@@ -5,8 +5,9 @@ import {
   CheckCircle2,
   Rocket,
   XCircle,
-  HelpCircle, Target,
+  Target,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { JobStageType } from "@/hooks/use-jobs";
 
@@ -36,7 +37,7 @@ const JobStageIconMap: Record<
   },
   classifying: {
     label: "Classifying",
-    icon: <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />,
+    icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
     color: "text-yellow-500",
   },
   awaiting_user_feedback: {
@@ -89,14 +90,14 @@ const JobStage = ({
   label?: boolean;
 }) => {
   return (
-    <div className="flex items-center gap-2">
+    <motion.div className="flex items-center gap-2">
       {JobStageIconMap[stage]?.icon}
       {label && (
         <span className={`text-sm ${JobStageIconMap[stage]?.color}`}>
           {JobStageIconMap[stage]?.label || stage}
         </span>
       )}
-    </div>
+    </motion.div>
   );
 };
 

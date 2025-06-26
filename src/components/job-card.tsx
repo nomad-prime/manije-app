@@ -1,7 +1,5 @@
 import {
-  Card,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import useJobType from "@/hooks/use-job-type";
@@ -13,7 +11,6 @@ import ReviewJobCard from "@/components/review-job-card";
 import ActionJobCard from "@/components/action-job-card";
 import ConversationJobCard from "@/components/conversation-job-card";
 import { AnimatePresence } from "framer-motion";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const JobCard = ({ jobId }: { jobId: string | null }) => {
   const { data: job, isLoading: isLoadingJob } = useJob({ id: jobId });
@@ -26,8 +23,8 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
   if (!job) return notFound();
 
   return (
-    <div className="h-full rounded-lg flex flex-col gap-2">
-      <div className="flex flex-row gap-2 sticky p-6">
+    <div className="rounded-lg flex flex-col gap-2 max-w-[840px] mx-auto w-full">
+      <div className="sticky top-0 flex flex-row gap-2 p-6 bg-background">
         <div className="flex flex-col gap-1 flex-grow">
           {jobType?.name && <CardTitle>{jobType?.name}</CardTitle>}
           {jobType?.description && (
@@ -37,7 +34,6 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
         {job?.stage && <JobStage stage={job.stage} label />}
       </div>
 
-      <ScrollArea className="flex-grow max-h-[calc(100vh-10rem)] w-full p-2 overflow-y-auto">
       <AnimatePresence initial={false}>
           {job.stage === "ready_for_review" && <ReviewJobCard job={job} />}
           {job.stage === "ready_for_actions" && <ActionJobCard job={job} />}
@@ -45,7 +41,6 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
             <ConversationJobCard job={job} />
           )}
         </AnimatePresence>
-      </ScrollArea>
     </div>
   );
 };

@@ -37,9 +37,9 @@ const ConversationJobCard = ({ job }: ConversationJobCardProps) => {
   };
 
   return (
-    <div className="p-1">
-      <div className="flex flex-col h-full px-4 pb-2">
-        <div className="flex flex-col gap-4 overflow-y-hidden px-4 pb-8 flex-grow">
+    <div className="w-full">
+      <div className="flex flex-col pb-12">
+        <div className="flex flex-col gap-4 overflow-y-hidden pb-8 flex-grow">
           {messages.length > 0 &&
             messages.map((message, index) => (
               <motion.div
@@ -53,7 +53,7 @@ const ConversationJobCard = ({ job }: ConversationJobCardProps) => {
                   content={message.content}
                   className={
                     message.role === "user"
-                      ? "bg-secondary text-secondary-foreground max-w-96 place-self-end"
+                      ? "bg-secondary text-secondary-foreground max-w-96 place-self-end border-input border-1 "
                       : ""
                   }
                 />
@@ -61,14 +61,14 @@ const ConversationJobCard = ({ job }: ConversationJobCardProps) => {
             ))}
         </div>
       </div>
-      <div className="sticky bottom-0 bg-background pr-1">
+      <motion.div className="sticky bottom-0 pb-10 bg-background w-full">
         <PromptInput
           onSubmit={handleSubmit}
           disabled={submitting}
-          className="w-full"
+          className="max-w-[840px] w-full"
           placeholder={"Answer here..."}
         />
-      </div>
+      </motion.div>
     </div>
   );
 };

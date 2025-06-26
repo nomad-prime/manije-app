@@ -37,7 +37,7 @@ export function LlmOutput({
   className: string;
 }) {
   return (
-    <div className={cn("text-sm w-full bg-background rounded-md border-input border-1 px-3 py-2", className)}>
+    <div className={cn("text-sm w-full bg-background rounded-md px-3 py-2", className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeHighlight]}

@@ -11,7 +11,7 @@ export default function AppHeader() {
   const showProjectSelector = pathname !== "/";
 
   return (
-    <header className="flex justify-between items-center p-4 h-16 border-b gap-4">
+    <header className="flex justify-between items-center p-4 h-16 border-b gap-4 sticky top-0 z-50 bg-background">
       <Link
         href="/"
         className="text-xl font-semibold text-white hover:opacity-80 transition"
