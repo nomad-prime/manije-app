@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { toast } from "sonner";
 import { ConversationJobRecord } from "@/hooks/use-jobs";
 import useJobConversation from "@/hooks/use-job-conversation";
@@ -13,7 +13,7 @@ interface ConversationJobCardProps {
 }
 
 const ConversationJobCard = ({ job }: ConversationJobCardProps) => {
-  const messages = job.messages ?? [];
+  const [messages, setMessages] = useState(job.messages ?? []);
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -25,6 +25,10 @@ const ConversationJobCard = ({ job }: ConversationJobCardProps) => {
 
   const handleSubmit = (prompt: string) => {
     setSubmitting(true);
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: prompt, id: Date.now().toString() },
+    ]);
     submitFeedback(
       { job_id: job.id, input: prompt },
       {
@@ -36,9 +40,13 @@ const ConversationJobCard = ({ job }: ConversationJobCardProps) => {
     );
   };
 
+  useEffect(() => {
+    setMessages(job.messages ?? []);
+  }, [job.id, job.messages]);
+
   return (
     <div className="w-full">
-      <div className="flex flex-col pb-12">
+      <div className="flex flex-col pb-14">
         <div className="flex flex-col gap-4 overflow-y-hidden pb-8 flex-grow">
           {messages.length > 0 &&
             messages.map((message, index) => (

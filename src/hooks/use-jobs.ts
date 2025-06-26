@@ -12,6 +12,7 @@ export interface Action {
 }
 
 export interface ChatMessage {
+  id: string;
   role: "user" | "assistant" | "system";
   content: string;
 }
@@ -63,7 +64,7 @@ export interface ActionJobRecord extends JobRecord {
 interface GenericJobRecord extends JobRecord {
   stage: Exclude<
     JobStageType,
-    "ready_for_review" | "ready_for_actions" | "awaiting_user_feedback"
+    "ready_for_review" | "ready_for_actions" | "awaiting_user_feedback" | "conversing"
   >;
 }
 
