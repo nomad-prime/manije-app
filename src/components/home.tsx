@@ -21,9 +21,7 @@ export const Home = () => {
   return (
     <LayoutGroup>
       <AnimatePresence mode="wait">
-        <div className="flex flex-col items-center justify-center h-full gap-8 w-2/3 md:w-1/2 lg:w-1/2">
-          <ProjectsCarousel />
-        </div>
+        <ProjectsCarousel />
       </AnimatePresence>
       <AnimatePresence mode="wait">
         <div className="flex flex-row items-center justify-center gap-8 h-full">
