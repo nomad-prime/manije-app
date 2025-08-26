@@ -4,6 +4,7 @@ import { useProject } from "@/hooks/use-project";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NextJobs } from "@/components/next-jobs";
+import { PlanNextStepsButton } from "@/components/plan-next-steps-button";
 
 interface ProjectOverviewProps {
   projectId: string | null;
@@ -63,6 +64,7 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
           className="flex flex-col sm:flex-row gap-4"
         >
           <NextJobs projectId={projectId} />
+          <PlanNextStepsButton projectId={projectId} />
         </motion.div>
       )}
     </div>

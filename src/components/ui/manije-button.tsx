@@ -8,7 +8,7 @@ type CustomButtonProps = ComponentProps<typeof Button> & {
   nudge?: boolean;
 };
 
-export const CustomButton = ({
+export const ManijeButton = ({
   className,
   fullWidth,
   loading,

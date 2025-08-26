@@ -21,5 +21,6 @@ export const queryKeys = {
   nextJobs: {
     all: (projectId: string) => (projectId ? ["nextJobs", projectId] : ["nextJobs"]),
     id: (id: string | null) => (id ? ["nextJob", id] : []),
-  }
+  },
+  taskStatus: (taskId: string | null) => (taskId ? ["taskStatus", taskId] : [])
 };

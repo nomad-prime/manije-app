@@ -6,7 +6,7 @@ import {
 } from "@clerk/nextjs";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { CustomButton } from "@/components/ui/custom-button";
+import { ManijeButton } from "@/components/ui/manije-button";
 
 export default function OrganizationProfilePage() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function OrganizationProfilePage() {
 
   return (
     <div className="flex flex-col justify-center h-full p-6">
-      <CustomButton
+      <ManijeButton
         variant="ghost"
         size="sm"
         onClick={() => router.back()}
@@ -22,7 +22,7 @@ export default function OrganizationProfilePage() {
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back
-      </CustomButton>
+      </ManijeButton>
       {organization && (
         <div className="flex flex-col items-center justify-center h-full p-6 w-full">
           <OrganizationProfile />

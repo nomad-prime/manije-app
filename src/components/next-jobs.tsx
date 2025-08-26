@@ -1,7 +1,7 @@
 "use client";
 
 import { Stars } from "lucide-react";
-import { CustomButton } from "@/components/ui/custom-button";
+import { ManijeButton } from "@/components/ui/manije-button";
 import useCreateJob from "@/hooks/use-create-job-stream";
 import useNextJobs, { NextJob as NextJobType } from "@/hooks/use-next-jobs";
 import useJobType from "@/hooks/use-job-type";
@@ -30,7 +30,7 @@ export const NextJob = ({ nextJob }: { nextJob: NextJobType }) => {
   };
 
   return (
-    <CustomButton
+    <ManijeButton
       variant="outline"
       className="group relative p-2"
       nudge
@@ -38,7 +38,7 @@ export const NextJob = ({ nextJob }: { nextJob: NextJobType }) => {
     >
       <Stars />
       <span>{jobType?.name ?? "Job Prototype"}</span>
-    </CustomButton>
+    </ManijeButton>
   );
 };
 

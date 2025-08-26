@@ -1,5 +1,5 @@
 import { JobRecord } from "@/hooks/use-jobs";
-import { CustomButton } from "@/components/ui/custom-button";
+import { ManijeButton } from "@/components/ui/manije-button";
 import { useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
@@ -53,9 +53,9 @@ const JobReview = ({ job }: { job: JobRecord }) => {
         </motion.p>
       </AnimatePresence>
       {isReady && (
-        <CustomButton size="sm" variant="default" onClick={handleDoneClick}>
+        <ManijeButton size="sm" variant="default" onClick={handleDoneClick}>
           Done
-        </CustomButton>
+        </ManijeButton>
       )}
     </div>
   );

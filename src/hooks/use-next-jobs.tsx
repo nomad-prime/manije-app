@@ -17,7 +17,7 @@ const useNextJobs = ({ projectId }: { projectId: string }) => {
     queryKey: queryKeys.nextJobs.all(projectId),
     queryFn: async (): Promise<NextJob[]> => {
       const response = await fetchWithAuth(
-        `${baseUrl}/jobs/next?project_id=${projectId}`,
+        `${baseUrl}/project/${projectId}/next-jobs`,
       );
       if (!response.ok) {
         throw new Error("Failed to fetch next jobs");

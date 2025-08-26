@@ -1,7 +1,7 @@
 "use client";
 
 import { Action } from "@/hooks/use-jobs";
-import { CustomButton } from "@/components/ui/custom-button";
+import { ManijeButton } from "@/components/ui/manije-button";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
@@ -27,7 +27,7 @@ const PostJobActions = ({
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.3 }}
           >
-            <CustomButton
+            <ManijeButton
               size="sm"
               variant="secondary"
               onClick={() => onActionClick(action)}
@@ -41,7 +41,7 @@ const PostJobActions = ({
               <span className="z-10 relative flex items-center gap-1">
                 {action.executed ? <Check className="w-4 h-4" /> : action.label}
               </span>
-            </CustomButton>
+            </ManijeButton>
           </motion.div>
         ))}
       </AnimatePresence>
