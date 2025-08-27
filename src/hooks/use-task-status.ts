@@ -46,7 +46,7 @@ const useTaskStatus = (
     refetchOnWindowFocus: false,
   });
 
-  const isTaskRunning = query.data?.state === "pending" || query.data?.state === "running";
+  const isTaskRunning = query.data?.state === "pending" || query.data?.state === "active";
   const isTaskCompleted = query.data?.state === "completed";
   const isTaskFailed = query.data?.state === "failed";
 
