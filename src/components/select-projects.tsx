@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useProjects from "@/hooks/use-projects";
 import {
@@ -10,15 +10,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCurrentProject } from "@/components/project-context";
+import { useParams, useRouter } from "next/navigation";
 
 export const SelectProjects = () => {
   const { data: projects } = useProjects();
-  const { currentProjectId, setCurrentProjectId } = useCurrentProject();
+
+  const router = useRouter();
+  const params = useParams();
+
+  // Get project ID from URL params
+  const currentProjectId = (params.slugs?.[0] as string) || null;
 
   const handleSelect = (value: string) => {
     if (value === currentProjectId) return;
-    setCurrentProjectId(value);
+    if (value === "all") {
+      router.push("/projects");
+    } else {
+      router.push(`/projects/${value}`);
+    }
   };
 
   return (
@@ -31,7 +40,10 @@ export const SelectProjects = () => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
         >
-          <Select onValueChange={handleSelect} value={currentProjectId || undefined}>
+          <Select
+            onValueChange={handleSelect}
+            value={currentProjectId || undefined}
+          >
             <SelectTrigger className="w-44">
               <SelectValue placeholder="Select a project" />
             </SelectTrigger>

@@ -20,7 +20,6 @@ export const PlanNextStepsButton = ({ projectId }: PlanNextStepsButtonProps) => 
   const { data: nextJobs } = useNextJobs({ projectId });
   const { isTaskRunning, isTaskCompleted, isTaskFailed } = useTaskStatus(taskId, {
     onSuccess: (data) => {
-        console.log("Next steps planning completed:", data);
       if (data.state === "completed") {
         queryClient.invalidateQueries({ queryKey: queryKeys.nextJobs.all(projectId) });
       }
@@ -30,7 +29,6 @@ export const PlanNextStepsButton = ({ projectId }: PlanNextStepsButtonProps) => 
   const handlePlanNextSteps = async () => {
     try {
       const response = await createNextJob(projectId);
-      console.log("Plan next steps response:", response);
       setTaskId(response.taskId);
     } catch (error) {
       console.error("Failed to plan next steps:", error);
