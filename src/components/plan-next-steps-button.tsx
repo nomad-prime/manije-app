@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { ManijeButton } from "@/components/ui/manije-button";
 import { Sparkles } from "lucide-react";
-import useCreateNextJob from "@/hooks/use-create-next-job";
+import useCreateNextJobs from "@/hooks/use-create-next-jobs";
 import useTaskStatus from "@/hooks/use-task-status";
+import useNextJobs from "@/hooks/use-next-jobs";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/cache-keys";
 
 interface PlanNextStepsButtonProps {
   projectId: string;
@@ -12,39 +15,46 @@ interface PlanNextStepsButtonProps {
 
 export const PlanNextStepsButton = ({ projectId }: PlanNextStepsButtonProps) => {
   const [taskId, setTaskId] = useState<string | null>(null);
-  const { mutateAsync: createNextJob, isPending } = useCreateNextJob();
-  const { data: taskStatus } = useTaskStatus(taskId);
+  const queryClient = useQueryClient();
+  const { mutateAsync: createNextJob, isPending } = useCreateNextJobs();
+  const { data: nextJobs } = useNextJobs({ projectId });
+  const { isTaskRunning, isTaskCompleted, isTaskFailed } = useTaskStatus(taskId, {
+    onSuccess: (data) => {
+        console.log("Next steps planning completed:", data);
+      if (data.state === "completed") {
+        queryClient.invalidateQueries({ queryKey: queryKeys.nextJobs.all(projectId) });
+      }
+    },
+  });
 
   const handlePlanNextSteps = async () => {
     try {
       const response = await createNextJob(projectId);
+      console.log("Plan next steps response:", response);
       setTaskId(response.taskId);
     } catch (error) {
       console.error("Failed to plan next steps:", error);
     }
   };
 
-  const isTaskRunning = taskStatus?.state === "pending" || taskStatus?.state === "running";
-  const isTaskCompleted = taskStatus?.state === "completed";
-  const isTaskFailed = taskStatus?.state === "failed";
+  const hasExistingNextJobs = nextJobs && nextJobs.length > 0;
 
-  // Don't show button if task is running
-  if (isTaskRunning) {
-    return null;
-  }
-
-  const buttonText = isTaskCompleted || isTaskFailed ? "Replan" : "Plan next steps";
+  const getButtonText = () => {
+    if (isPending || isTaskRunning) return "Planning...";
+    if (isTaskCompleted || isTaskFailed || hasExistingNextJobs) return "Replan";
+    return "Plan next steps";
+  };
 
   return (
     <ManijeButton
-      variant="outline"
-      className="group relative p-2"
+      variant="secondary"
+      className="group relative"
       nudge
       onClick={handlePlanNextSteps}
-      disabled={isPending}
+      disabled={isPending || isTaskRunning}
     >
-      <Sparkles className="w-4 h-4" />
-      <span>{buttonText}</span>
+      <Sparkles className={`w-4 h-4 ${(isPending || isTaskRunning) ? 'animate-pulse' : ''}`} />
+      <span>{getButtonText()}</span>
     </ManijeButton>
   );
 };

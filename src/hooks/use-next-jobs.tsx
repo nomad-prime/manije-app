@@ -17,15 +17,13 @@ const useNextJobs = ({ projectId }: { projectId: string }) => {
     queryKey: queryKeys.nextJobs.all(projectId),
     queryFn: async (): Promise<NextJob[]> => {
       const response = await fetchWithAuth(
-        `${baseUrl}/project/${projectId}/next-jobs`,
+        `${baseUrl}/projects/${projectId}/next-jobs`,
       );
       if (!response.ok) {
         throw new Error("Failed to fetch next jobs");
       }
       return response.json();
     },
-    refetchOnWindowFocus: false,
-    refetchInterval: 5000,
   });
 };
 

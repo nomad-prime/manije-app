@@ -8,29 +8,54 @@ export interface TaskStatus {
   state: "pending" | "running" | "completed" | "failed";
 }
 
-const useTaskStatus = (taskId: string | null) => {
+interface UseTaskStatusOptions {
+  onSuccess?: (data: TaskStatus) => void;
+}
+
+const useTaskStatus = (
+  taskId: string | null,
+  options?: UseTaskStatusOptions,
+) => {
   const fetchWithAuth = useAuthFetch();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: queryKeys.taskStatus(taskId),
     queryFn: async (): Promise<TaskStatus> => {
       if (!taskId) {
         throw new Error("Task ID is required");
       }
-      
+
       const response = await fetchWithAuth(`${baseUrl}/tasks/${taskId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch task status");
       }
-      return response.json();
+      const json = await response.json();
+
+      options?.onSuccess?.(json as unknown as TaskStatus);
+
+      return json;
     },
     enabled: !!taskId,
-    refetchInterval: (data) => {
+    refetchInterval: (query) => {
       // Stop polling when task is completed or failed
-      return data?.state === "completed" || data?.state === "failed" ? false : 2000;
+      return query.state.data?.state === "completed" ||
+        query.state.data?.state === "failed"
+        ? false
+        : 2000;
     },
     refetchOnWindowFocus: false,
   });
+
+  const isTaskRunning = query.data?.state === "pending" || query.data?.state === "running";
+  const isTaskCompleted = query.data?.state === "completed";
+  const isTaskFailed = query.data?.state === "failed";
+
+  return {
+    ...query,
+    isTaskRunning,
+    isTaskCompleted,
+    isTaskFailed,
+  };
 };
 
 export default useTaskStatus;

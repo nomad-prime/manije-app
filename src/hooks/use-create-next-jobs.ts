@@ -3,25 +3,25 @@ import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 
-interface CreateNextJobResponse {
+interface CreateNextJobsResponse {
   taskId: string;
 }
 
-const useCreateNextJob = () => {
+const useCreateNextJobs = () => {
   const fetchWithAuth = useAuthFetch();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (projectId: string): Promise<CreateNextJobResponse> => {
-      const response = await fetchWithAuth(`${baseUrl}/projects/${projectId}/next-job`, {
+    mutationFn: async (projectId: string): Promise<CreateNextJobsResponse> => {
+      const response = await fetchWithAuth(`${baseUrl}/projects/${projectId}/next-jobs`, {
         method: "POST",
         body: JSON.stringify({}),
       });
-      
+
       if (!response.ok) {
         throw new Error("Failed to create next job");
       }
-      
+
       return response.json();
     },
     onSuccess: (_, projectId) => {
@@ -30,4 +30,4 @@ const useCreateNextJob = () => {
   });
 };
 
-export default useCreateNextJob;
+export default useCreateNextJobs;

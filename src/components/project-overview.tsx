@@ -47,21 +47,12 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
         {project.description}
       </motion.p>
 
-      <motion.h2
-        className="text-2xl font-semibold mb-4"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
-      >
-        What’s next
-      </motion.h2>
-
       {projectId && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="flex flex-col sm:flex-row gap-4"
+          className="flex-row sm:flex-row space-y-8"
         >
           <NextJobs projectId={projectId} />
           <PlanNextStepsButton projectId={projectId} />

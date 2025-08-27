@@ -17,7 +17,7 @@ const ProjectsCarousel = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-8 w-2/3 md:w-1/2 lg:w-1/2">
+    <div className="flex flex-col items-center h-full gap-8 w-2/3 md:w-1/2 lg:w-1/2">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
