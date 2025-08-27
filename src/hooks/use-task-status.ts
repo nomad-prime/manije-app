@@ -5,7 +5,7 @@ import { baseUrl } from "@/lib/urls";
 
 export interface TaskStatus {
   id: string;
-  state: "pending" | "running" | "completed" | "failed";
+  state: "pending" | "active" | "completed" | "failed";
 }
 
 interface UseTaskStatusOptions {
