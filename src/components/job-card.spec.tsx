@@ -41,7 +41,6 @@ describe("JobCard", () => {
         description: "A test job type.",
         system_prompt: "System prompt for testing.",
         user_prompt: "User prompt for testing.",
-        output_schema: { summary: "string" },
         model: "test-model",
       },
     });

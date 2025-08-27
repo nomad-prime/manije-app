@@ -1,6 +1,6 @@
 "use client";
 
-import { CardContent, CardFooter } from "@/components/ui/card";
+import { CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { CustomTextarea } from "@/components/ui/custom-textarea";
 import JobReview from "@/components/job-review";

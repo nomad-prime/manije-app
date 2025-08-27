@@ -1,6 +1,6 @@
 "use client";
 
-import { CardContent, CardFooter } from "@/components/ui/card";
+import { CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import PostJobActions from "@/components/post-job-actions";
 import { ActionOutcome, useExecuteAction } from "@/hooks/use-execute-action";

@@ -52,7 +52,6 @@ describe("ProjectPage", () => {
         description: "Description for job type 1",
         system_prompt: "System prompt for job type 1",
         user_prompt: "User prompt for job type 1",
-        output_schema: { example: "string" },
         model: "gpt-3.5-turbo",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
