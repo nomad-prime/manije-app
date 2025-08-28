@@ -8,13 +8,8 @@ export interface TaskStatus {
   state: "pending" | "active" | "completed" | "failed";
 }
 
-interface UseTaskStatusOptions {
-  onSuccess?: (data: TaskStatus) => void;
-}
-
 const useTaskStatus = (
   taskId: string | null,
-  options?: UseTaskStatusOptions,
 ) => {
   const fetchWithAuth = useAuthFetch();
 
@@ -29,11 +24,8 @@ const useTaskStatus = (
       if (!response.ok) {
         throw new Error("Failed to fetch task status");
       }
-      const json = await response.json();
 
-      options?.onSuccess?.(json as unknown as TaskStatus);
-
-      return json;
+      return await response.json();
     },
     enabled: !!taskId,
     refetchInterval: (query) => {

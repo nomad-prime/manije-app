@@ -1,4 +1,4 @@
-import { JobRecord } from "@/hooks/use-jobs";
+import { ReviewJobRecord } from "@/hooks/use-jobs";
 import { ManijeButton } from "@/components/ui/manije-button";
 import { useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -18,7 +18,7 @@ const rotatingMessages = [
   "Does this feel right? If so, you know what to do 👇",
 ];
 
-const JobReview = ({ job }: { job: JobRecord }) => {
+const JobReview = ({ job }: { job: ReviewJobRecord }) => {
   const jobStage = job.stage;
 
   const isReady = jobStage === "ready_for_review";

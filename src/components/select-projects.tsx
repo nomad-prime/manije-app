@@ -1,6 +1,6 @@
 "use client";
 
-import React, { JSX } from "react";
+import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useProjects from "@/hooks/use-projects";
 import {

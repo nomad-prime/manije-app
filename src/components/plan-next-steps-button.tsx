@@ -6,8 +6,6 @@ import { Sparkles } from "lucide-react";
 import useCreateNextJobs from "@/hooks/use-create-next-jobs";
 import useTaskStatus from "@/hooks/use-task-status";
 import useNextJobs from "@/hooks/use-next-jobs";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/hooks/cache-keys";
 
 interface PlanNextStepsButtonProps {
   projectId: string;
@@ -15,16 +13,9 @@ interface PlanNextStepsButtonProps {
 
 export const PlanNextStepsButton = ({ projectId }: PlanNextStepsButtonProps) => {
   const [taskId, setTaskId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
   const { mutateAsync: createNextJobs, isPending } = useCreateNextJobs();
   const { data: nextJobs } = useNextJobs({ projectId });
-  const { isTaskRunning, isTaskCompleted, isTaskFailed } = useTaskStatus(taskId, {
-    onSuccess: (data) => {
-      if (data.state === "completed") {
-        queryClient.invalidateQueries({ queryKey: queryKeys.nextJobs.all(projectId) });
-      }
-    },
-  });
+  const { isTaskRunning, isTaskCompleted, isTaskFailed } = useTaskStatus(taskId);
 
   const handlePlanNextSteps = async () => {
     try {

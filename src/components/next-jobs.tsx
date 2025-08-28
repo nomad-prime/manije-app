@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks/cache-keys";
+import { useNextJobsSSE } from "@/hooks/use-next-jobs-sse";
 
 export const NextJob = ({ nextJob }: { nextJob: NextJobType }) => {
   const { data: jobType } = useJobType(nextJob.job_type_id);
@@ -44,6 +45,7 @@ export const NextJob = ({ nextJob }: { nextJob: NextJobType }) => {
 
 export const NextJobs = ({ projectId }: { projectId: string }) => {
   const { data: nextJobs, isLoading } = useNextJobs({ projectId });
+  const { connectionStatus, error } = useNextJobsSSE(projectId);
 
   if (isLoading) {
     return (
@@ -58,15 +60,16 @@ export const NextJobs = ({ projectId }: { projectId: string }) => {
   if (!nextJobs || nextJobs.length === 0) {
     return null;
   }
+
   return (
-    <div >
+    <div>
       <motion.h2
         className="text-2xl font-semibold mb-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.4 }}
       >
-        What’s next
+        What&apos;s next
       </motion.h2>
 
       <div className="flex flex-wrap gap-2">
@@ -74,6 +77,12 @@ export const NextJobs = ({ projectId }: { projectId: string }) => {
           <NextJob nextJob={nextJob} key={nextJob.id} />
         ))}
       </div>
+
+      {connectionStatus === "error" && error && (
+        <div className="text-xs text-muted-foreground mt-2">
+          Live updates unavailable. Refreshing manually may be required.
+        </div>
+      )}
     </div>
   );
 };
