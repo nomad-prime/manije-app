@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { JSX } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import useProjects from "@/hooks/use-projects";
 import {
@@ -11,6 +11,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useParams, useRouter } from "next/navigation";
+import { useProject } from "@/hooks/use-project";
+
+function SelectProject({ id }: { id: string }) {
+  const { data: project } = useProject(id);
+  console.log(project);
+  if (!project) return null;
+
+  return (
+    <SelectItem value={id}>
+      {(project.data?.["name"] as string) || "Unnamed Project"}
+    </SelectItem>
+  );
+}
 
 export const SelectProjects = () => {
   const { data: projects } = useProjects();
@@ -52,9 +65,7 @@ export const SelectProjects = () => {
                 All Projects
               </SelectItem>
               {projects.map((project) => (
-                <SelectItem value={project.id} key={project.id}>
-                  {project.name}
-                </SelectItem>
+                <SelectProject key={project.id} id={project.id} />
               ))}
             </SelectContent>
           </Select>

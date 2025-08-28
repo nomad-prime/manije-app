@@ -28,6 +28,10 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
     throw error ?? new Error("Project not found");
   }
 
+  const projectName = (project.data?.["name"] || "Unnamed Project") as string;
+  const projectDescription = (project.data?.["description"] ||
+    "No description provided.") as string;
+
   return (
     <div className="px-10 pt-10 max-w-3xl">
       <motion.h1
@@ -36,7 +40,7 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        {project.name}
+        {projectName}
       </motion.h1>
       <motion.p
         initial={{ opacity: 0, y: 10 }}
@@ -44,7 +48,7 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
         transition={{ duration: 0.4, delay: 0.2 }}
         className="text-muted-foreground mb-10 leading-relaxed"
       >
-        {project.description}
+        {projectDescription}
       </motion.p>
 
       {projectId && (

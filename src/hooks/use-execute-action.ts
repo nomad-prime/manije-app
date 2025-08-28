@@ -24,13 +24,13 @@ export const useExecuteAction = (config?: {
       id,
       job_record_id,
     }: ActionArgs): Promise<ActionOutcome> => {
-      const url = `${baseUrl}/actions/${id}`;
+      const url = `${baseUrl}/jobs/${job_record_id}/actions/${id}`;
 
       const res = await fetchWithAuth(url, {
         method: "POST",
         body: JSON.stringify({
           job_record_id,
-        })
+        }),
       });
 
       if (!res.ok) {

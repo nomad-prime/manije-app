@@ -16,7 +16,7 @@ interface PlanNextStepsButtonProps {
 export const PlanNextStepsButton = ({ projectId }: PlanNextStepsButtonProps) => {
   const [taskId, setTaskId] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  const { mutateAsync: createNextJob, isPending } = useCreateNextJobs();
+  const { mutateAsync: createNextJobs, isPending } = useCreateNextJobs();
   const { data: nextJobs } = useNextJobs({ projectId });
   const { isTaskRunning, isTaskCompleted, isTaskFailed } = useTaskStatus(taskId, {
     onSuccess: (data) => {
@@ -28,7 +28,7 @@ export const PlanNextStepsButton = ({ projectId }: PlanNextStepsButtonProps) => 
 
   const handlePlanNextSteps = async () => {
     try {
-      const response = await createNextJob(projectId);
+      const response = await createNextJobs(projectId);
       setTaskId(response.taskId);
     } catch (error) {
       console.error("Failed to plan next steps:", error);

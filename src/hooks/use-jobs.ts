@@ -42,7 +42,7 @@ export interface JobRecord {
   updated_by: string;
   title?: string;
   error_message?: string;
-  project_id?: string;
+  project_id: string;
 }
 
 export interface ConversationJobRecord extends JobRecord {

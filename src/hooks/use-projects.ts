@@ -7,7 +7,7 @@ export interface Project {
   open_jobs: number;
   done_jobs: number;
   id: string;
-  name: string;
+  data?: Record<string, unknown>;
 }
 
 const useProjects = () => {
