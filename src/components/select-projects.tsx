@@ -15,7 +15,6 @@ import { useProject } from "@/hooks/use-project";
 
 function SelectProject({ id }: { id: string }) {
   const { data: project } = useProject(id);
-  console.log(project);
   if (!project) return null;
 
   return (
