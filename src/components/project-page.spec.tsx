@@ -3,14 +3,20 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, it, expect, describe, beforeEach } from "vitest";
 import ProjectPage from "@/components/project-page";
 import * as nextNavigation from "next/navigation";
-import useCreateJob from "@/hooks/use-create-job-stream";
+import useCreateJobStream from "@/hooks/use-create-job-stream";
 import useJob from "@/hooks/use-job";
 import useJobs from "@/hooks/use-jobs";
 import useJobType from "@/hooks/use-job-type";
+import { useProject } from "@/hooks/use-project";
+import useNextJobs from "@/hooks/use-next-jobs";
+import { useNextJobsSSE } from "@/hooks/use-next-jobs-sse";
+import useCreateNextJobs from "@/hooks/use-create-next-jobs";
+import useTaskStatus from "@/hooks/use-task-status";
 
 vi.mock("next/navigation", () => ({
   useParams: vi.fn(),
   useRouter: vi.fn(),
+  usePathname: vi.fn(),
 }));
 
 vi.mock("@/hooks/use-create-job-stream", () => ({
@@ -34,13 +40,59 @@ vi.mock("@/hooks/use-job-type", () => ({
   })),
 }));
 
+vi.mock("@/hooks/use-project", () => ({
+  useProject: vi.fn(() => ({
+    data: {
+      data: {
+        name: "Test Project",
+        description: "Test project description",
+      },
+    },
+    isLoading: false,
+    error: null,
+  })),
+}));
+
+vi.mock("@/hooks/use-next-jobs", () => ({
+  default: vi.fn(() => ({
+    data: [],
+    isLoading: true,
+  })),
+}));
+
+vi.mock("@/hooks/use-next-jobs-sse", () => ({
+  useNextJobsSSE: vi.fn(() => ({
+    connectionStatus: "connected",
+    error: null,
+  })),
+}));
+
+vi.mock("@/hooks/use-create-next-jobs", () => ({
+  default: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
+}));
+
+vi.mock("@/hooks/use-task-status", () => ({
+  default: vi.fn(() => ({
+    isTaskRunning: false,
+    isTaskCompleted: false,
+    isTaskFailed: false,
+  })),
+}));
+
 describe("ProjectPage", () => {
   beforeEach(() => {
     (nextNavigation.useParams as ReturnType<typeof vi.fn>).mockReturnValue({
       slugs: ["proj123", "jobs", "job456"],
     });
 
-    (useCreateJob as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    (nextNavigation.usePathname as ReturnType<typeof vi.fn>).mockReturnValue(
+      "/projects/proj123/jobs/job456"
+    );
+
+    (useCreateJobStream as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       mutateAsync: vi.fn(async () => ({ id: "newJobId" })),
       isPending: false,
     });
@@ -86,56 +138,20 @@ describe("ProjectPage", () => {
 
   it("renders JobCard when jobId is present", async () => {
     renderWithProviders(<ProjectPage />);
-    expect(await screen.findByText(/LLM output summary/i)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(/LLM output summary/i)).toBeInTheDocument();
   });
 
-  it("submits prompt via FloatingPromptInput and updates URL", async () => {
-      (nextNavigation.useParams as ReturnType<typeof vi.fn>).mockReturnValue({
-      slugs: ["proj123", "jobs"],
-    });
-
-    renderWithProviders(<ProjectPage />);
-    const textarea = await screen.findByPlaceholderText("Let's start...");
-
-    fireEvent.change(textarea, { target: { value: "My prompt" } });
-    fireEvent.keyDown(textarea, { key: "Enter", code: "Enter" });
-
-    await waitFor(() => {
-      expect(window.history.pushState).toHaveBeenCalledWith(
-        {},
-        "",
-        "/projects/proj123/jobs/newJobId",
-      );
-    });
-  });
-
-  it("renders PromptInput when no jobId is present", () => {
+  it("renders ProjectOverview when no jobId is present", () => {
     (nextNavigation.useParams as ReturnType<typeof vi.fn>).mockReturnValue({
       slugs: ["proj123"],
     });
+    (nextNavigation.usePathname as ReturnType<typeof vi.fn>).mockReturnValue(
+      "/projects/proj123"
+    );
 
     renderWithProviders(<ProjectPage />);
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
-  });
-
-  it("submits prompt via PromptInput and updates URL", async () => {
-    (nextNavigation.useParams as ReturnType<typeof vi.fn>).mockReturnValue({
-      slugs: ["proj123"],
-    });
-
-    renderWithProviders(<ProjectPage />);
-    const textarea = screen.getByRole("textbox");
-
-    fireEvent.change(textarea, { target: { value: "Write summary" } });
-    fireEvent.keyDown(textarea, { key: "Enter", code: "Enter" });
-
-    await waitFor(() => {
-      expect(window.history.pushState).toHaveBeenCalledWith(
-        {},
-        "",
-        "/projects/proj123/jobs/newJobId",
-      );
-    });
+    expect(screen.getByText("Test Project")).toBeInTheDocument();
+    expect(screen.getByText("Test project description")).toBeInTheDocument();
   });
 
   it("handles job selection from JobList", async () => {

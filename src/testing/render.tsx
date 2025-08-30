@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import { ReactNode } from "react";
 import React from "react";
-import { ProjectProvider } from "@/components/project-context";
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { vi } from "vitest";
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider/next-13.5";
@@ -43,9 +42,7 @@ const ClerkTestProvider = ({
 
 const createWrapper = (ui: React.ReactElement) => (
   <ClerkTestProvider>
-    <ProjectProvider>
       <QueryClientProvider client={new QueryClient()}>{ui}</QueryClientProvider>
-    </ProjectProvider>
   </ClerkTestProvider>
 );
 
