@@ -17,19 +17,21 @@ export interface ChatMessage {
   content: string;
 }
 
-export type JobStageType = "pending_classification"
-  |"classifying"
-  |"validating_input"
-  |"awaiting_user_feedback"
-  |"ready_for_execution"
-  |"processing"
-  |"post_processing"
-  |"ready_for_review"
-  |"ready_for_actions"
-  |"conversing"
-  |"started"
-  |"failed"
-  |"completed"
+export type JobStageType = 
+  | "started"
+  | "validating_input"
+  | "valid_input"
+  | "invalid_input"
+  | "summarizing"
+  | "summarized"
+  | "classifying"
+  | "classified"
+  | "processing"
+  | "processed"
+  | "ready_for_review"
+  | "ready_for_actions"
+  | "failed"
+  | "completed"
 
 
 export interface JobRecord {
@@ -47,7 +49,7 @@ export interface JobRecord {
 
 export interface ConversationJobRecord extends JobRecord {
   messages: ChatMessage[];
-  stage: "awaiting_user_feedback" | "conversing";
+  stage: "validating_input" | "invalid_input";
 }
 
 export interface ReviewJobRecord extends JobRecord {
@@ -64,7 +66,7 @@ export interface ActionJobRecord extends JobRecord {
 interface GenericJobRecord extends JobRecord {
   stage: Exclude<
     JobStageType,
-    "ready_for_review" | "ready_for_actions" | "awaiting_user_feedback" | "conversing"
+    "ready_for_review" | "ready_for_actions" | "validating_input" | "invalid_input"
   >;
 }
 
