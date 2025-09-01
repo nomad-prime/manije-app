@@ -17,7 +17,11 @@ const JobStageIconMap: Record<
   { label: string; icon: ReactNode; color: string }
 > = {
   classified: { label: "classified", color: "", icon: undefined },
-  data_collected: { label: "data collected", color: "", icon: undefined },
+  data_collected: {
+    label: "data collected",
+    color: "text-green-500",
+    icon: <Database className="h-4 w-4 text-green-500" />,
+  },
   processed: { label: "processed", color: "", icon: undefined },
   summarized: { label: "summarized", color: "", icon: undefined },
   summarizing: { label: "summarizing", color: "", icon: undefined },
