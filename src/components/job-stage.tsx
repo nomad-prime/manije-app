@@ -1,11 +1,12 @@
 import {
   Pencil,
-  PlayCircle,
   Loader2,
   CheckCircle2,
   Rocket,
   XCircle,
-  Target,
+  Database,
+  Upload,
+  PartyPopper,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
@@ -15,47 +16,47 @@ const JobStageIconMap: Record<
   JobStageType,
   { label: string; icon: ReactNode; color: string }
 > = {
+  classified: { label: "classified", color: "", icon: undefined },
+  data_collected: { label: "data collected", color: "", icon: undefined },
+  processed: { label: "processed", color: "", icon: undefined },
+  summarized: { label: "summarized", color: "", icon: undefined },
+  summarizing: { label: "summarizing", color: "", icon: undefined },
+  valid_input: {
+    label: "looks solid",
+    color: "text-green-500",
+    icon: <PartyPopper className="h-4 w-4 text-green-500" />,
+  },
+  collecting_data: {
+    label: "collecting data",
+    color: "text-purple-500",
+    icon: <Database className="h-4 w-4 text-purple-500" />,
+  },
   completed: {
-    label: "Validating Input",
+    label: "completed",
     icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
     color: "text-green-500",
   },
   ready_for_actions: {
     label: "Ready For Actions",
-    icon: <Target className="h-4 w-4 text-blue-500" />,
+    icon: <Upload className="h-4 w-4 text-blue-500" />,
     color: "text-blue-500",
   },
-  validating_input: {
-    label: "Validating Input",
+  evaluating_input: {
+    label: "Evaluating",
     icon: <Loader2 className="h-4 w-4 animate-spin text-yellow-500" />,
     color: "text-yellow-500",
-  },
-  pending_classification: {
-    label: "Classifying",
-    icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
-    color: "text-muted-foreground",
   },
   classifying: {
     label: "Classifying",
     icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
     color: "text-yellow-500",
   },
-  awaiting_user_feedback: {
+  wait_for_user: {
     label: "Awaiting Feedback",
     icon: <Pencil className="h-4 w-4 text-yellow-500" />,
     color: "text-yellow-500",
   },
-  ready_for_execution: {
-    label: "Ready for Execution",
-    icon: <PlayCircle className="h-4 w-4 text-blue-500" />,
-    color: "text-blue-500",
-  },
   processing: {
-    label: "Processing",
-    icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
-    color: "text-purple-500",
-  },
-  post_processing: {
     label: "Processing",
     icon: <Loader2 className="h-4 w-4 animate-spin text-purple-500" />,
     color: "text-purple-500",
@@ -64,11 +65,6 @@ const JobStageIconMap: Record<
     label: "Ready For Review",
     icon: <CheckCircle2 className="h-4 w-4 text-green-500" />,
     color: "text-green-500",
-  },
-  conversing: {
-    label: "Conversing",
-    icon: <Pencil className="h-4 w-4 text-yellow-500" />,
-    color: "text-yellow-500",
   },
   started: {
     label: "Started",

@@ -17,11 +17,13 @@ export interface ChatMessage {
   content: string;
 }
 
-export type JobStageType = 
+export type JobStageType =
   | "started"
-  | "validating_input"
+  | "evaluating_input"
   | "valid_input"
-  | "invalid_input"
+  | "wait_for_user"
+  | "collecting_data"
+  | "data_collected"
   | "summarizing"
   | "summarized"
   | "classifying"
@@ -47,26 +49,32 @@ export interface JobRecord {
   project_id: string;
 }
 
+type ConversationStages = "evaluating_input" | "wait_for_user"
+
 export interface ConversationJobRecord extends JobRecord {
   messages: ChatMessage[];
-  stage: "validating_input" | "invalid_input";
+  stage: ConversationStages;
 }
+
+type ReviewStages = "ready_for_review"
 
 export interface ReviewJobRecord extends JobRecord {
   output: Record<string, unknown>;
-  stage: "ready_for_review";
+  stage: ReviewStages;
 }
+
+type ActionStages = "ready_for_actions"
 
 export interface ActionJobRecord extends JobRecord {
   output: Record<string, unknown>;
   actions: Action[];
-  stage: "ready_for_actions";
+  stage: ActionStages;
 }
 
 interface GenericJobRecord extends JobRecord {
   stage: Exclude<
     JobStageType,
-    "ready_for_review" | "ready_for_actions" | "validating_input" | "invalid_input"
+    ConversationStages | ActionStages | ReviewStages
   >;
 }
 

@@ -19,7 +19,7 @@ function SelectProject({ id }: { id: string }) {
 
   return (
     <SelectItem value={id}>
-      {(project.data?.["name"] as string) || "Unnamed Project"}
+      {(project.data?.project_name as string) || "Unnamed Project"}
     </SelectItem>
   );
 }

@@ -37,7 +37,7 @@ const JobCard = ({ jobId }: { jobId: string | null }) => {
       <AnimatePresence initial={false}>
           {job.stage === "ready_for_review" && <ReviewJobCard job={job} />}
           {job.stage === "ready_for_actions" && <ActionJobCard job={job} />}
-          {(job.stage === "awaiting_user_feedback" || job.stage === "conversing") && (
+          {(job.stage === "wait_for_user" || job.stage === "evaluating_input") && (
             <ConversationJobCard job={job} />
           )}
         </AnimatePresence>

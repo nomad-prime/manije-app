@@ -28,9 +28,8 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
     throw error ?? new Error("Project not found");
   }
 
-  const projectName = (project.data?.["name"] || "Unnamed Project") as string;
-  const projectDescription = (project.data?.["description"] ||
-    "No description provided.") as string;
+  const projectName = (project.data?.project_name || "Unnamed Project") as string;
+  const projectDescription = (project.data?.project_description || "Unnamed Project") as string;
 
   return (
     <div className="px-10 pt-10 max-w-3xl">

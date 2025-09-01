@@ -23,7 +23,7 @@ export function useProject(projectId: string | null) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fields: ["name", "description"],
+          fields: ["project_name", "project_description"],
         }),
       });
 

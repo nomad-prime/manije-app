@@ -28,9 +28,6 @@ export const useExecuteAction = (config?: {
 
       const res = await fetchWithAuth(url, {
         method: "POST",
-        body: JSON.stringify({
-          job_record_id,
-        }),
       });
 
       if (!res.ok) {
