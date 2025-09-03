@@ -44,8 +44,8 @@ vi.mock("@/hooks/use-project", () => ({
   useProject: vi.fn(() => ({
     data: {
       data: {
-        name: "Test Project",
-        description: "Test project description",
+        project_name: "Test Project",
+        project_description: "Test project description",
       },
     },
     isLoading: false,
