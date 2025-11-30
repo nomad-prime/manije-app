@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import JobList from "@/components/job-list";
-import JobCard from "@/components/job-card";
+import SessionList from "@/components/session-list";
+import ChatCard from "@/components/chat-card";
 import { ProjectOverview } from "@/components/project-overview";
 
 export default function ProjectPage() {
@@ -11,25 +11,24 @@ export default function ProjectPage() {
   const segments = pathname.split("/").filter(Boolean);
   const projectId = segments[1];
 
-  const jobId = segments[2] === "jobs" ? segments[3] : null;
+  const sessionId = segments[2] === "chat" ? segments[3] : null;
 
-
-  const handleSelect = (jobId: string) => {
-    window.history.pushState({}, "", `/projects/${projectId}/jobs/${jobId}`);
+  const handleChatSelect = (sessionId: string) => {
+    window.history.pushState({}, "", `/projects/${projectId}/chat/${sessionId}`);
   };
 
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       <div className="max-w-60 w-full border-r overflow-y-auto">
-        <JobList projectId={projectId} onSelect={handleSelect}/>
+        <SessionList projectId={projectId} onSelect={handleChatSelect} />
       </div>
       <div className="flex-1 flex flex-col overflow-y-auto">
-        {jobId ? (
+        {sessionId ? (
           <div className="flex-1 py-4 px-4">
-            <JobCard jobId={jobId}/>
+            <ChatCard sessionId={sessionId} />
           </div>
         ) : (
-          <ProjectOverview projectId={projectId}/>
+          <ProjectOverview projectId={projectId} />
         )}
       </div>
     </div>

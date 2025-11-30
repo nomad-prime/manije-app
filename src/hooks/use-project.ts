@@ -28,12 +28,12 @@ export function useProject(projectId: string | null) {
       });
 
       if (!dataResponse.ok) {
-        throw new Error("Failed to fetch project data");
+        // throw new Error("Failed to fetch project data");
+        return project;
       }
       const data = await dataResponse.json();
 
       return { ...project, data };
-
     },
   });
 }

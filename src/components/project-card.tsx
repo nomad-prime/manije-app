@@ -18,7 +18,9 @@ export function ProjectCard({
     >
       <div className="flex items-center gap-2 mb-4">
         <div>
-          <h3 className="text-lg font-semibold">{project.name}</h3>
+          <h3 className="text-lg font-semibold">
+            {project.data?.project_name || `Project ${project.id.slice(0, 8)}`}
+          </h3>
         </div>
       </div>
       <div className="space-y-1 text-sm">

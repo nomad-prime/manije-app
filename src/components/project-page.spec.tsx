@@ -7,11 +7,6 @@ import useCreateJobStream from "@/hooks/use-create-job-stream";
 import useJob from "@/hooks/use-job";
 import useJobs from "@/hooks/use-jobs";
 import useJobType from "@/hooks/use-job-type";
-import { useProject } from "@/hooks/use-project";
-import useNextJobs from "@/hooks/use-next-jobs";
-import { useNextJobsSSE } from "@/hooks/use-next-jobs-sse";
-import useCreateNextJobs from "@/hooks/use-create-next-jobs";
-import useTaskStatus from "@/hooks/use-task-status";
 
 vi.mock("next/navigation", () => ({
   useParams: vi.fn(),

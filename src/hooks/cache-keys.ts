@@ -22,5 +22,10 @@ export const queryKeys = {
     all: (projectId: string) => (projectId ? ["nextJobs", projectId] : ["nextJobs"]),
     id: (id: string | null) => (id ? ["nextJob", id] : []),
   },
-  taskStatus: (taskId: string | null) => (taskId ? ["taskStatus", taskId] : [])
+  taskStatus: (taskId: string | null) => (taskId ? ["taskStatus", taskId] : []),
+  sessions: {
+    all: (projectId?: string | null) =>
+      projectId ? ["sessions", projectId] : ["sessions"],
+    id: (id: string | null) => (id ? ["session", id] : []),
+  },
 };

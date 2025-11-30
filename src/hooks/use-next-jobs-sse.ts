@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { baseStreamUrl, baseUrl } from "@/lib/urls";
+import { baseStreamUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 import { NextJob } from "@/hooks/use-next-jobs";
 

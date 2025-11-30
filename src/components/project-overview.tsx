@@ -3,8 +3,6 @@
 import { useProject } from "@/hooks/use-project";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import { NextJobs } from "@/components/next-jobs";
-import { PlanNextStepsButton } from "@/components/plan-next-steps-button";
 
 interface ProjectOverviewProps {
   projectId: string | null;
@@ -49,18 +47,6 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
       >
         {projectDescription}
       </motion.p>
-
-      {projectId && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="flex-row sm:flex-row space-y-8"
-        >
-          <NextJobs projectId={projectId} />
-          <PlanNextStepsButton projectId={projectId} />
-        </motion.div>
-      )}
     </div>
   );
 };
