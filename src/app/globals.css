@@ -80,7 +80,7 @@
 }
 
 .dark {
-  --background: #050e0c;
+  --background: #0b201c;
   --foreground: #e7f1ef;
   --card: #0e1a17;
   --card-foreground: oklch(0.985 0 0);
