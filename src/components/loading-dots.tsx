@@ -1,9 +1,38 @@
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
+
 const LoadingDots = () => {
+  const [frame, setFrame] = useState(0);
+
+
+  const currentSpinner = useMemo(() => {
+    const brailleSpinners = [
+      ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧'],
+      ['⠐', '⠒', '⠓', '⠋', '⠙', '⠹', '⠸', '⠼'],
+      ['⠁', '⠂', '⠄', '⡀', '⢀', '⠠', '⠐', '⠈'],
+      ['⡏', '⡟', '⡻', '⣻', '⣿', '⣯', '⣧', '⡧'],
+      ['⣷', '⣯', '⣟', '⡿', '⢿', '⠿', '⠷', '⣶'],
+      ['⠋', '⠙', '⠚', '⠞', '⠖', '⠦', '⠴', '⠲'],
+      ['⢹', '⢺', '⢼', '⣸', '⣇', '⡧', '⡏', '⡃'],
+    ];
+
+    return brailleSpinners[Math.floor(Math.random() * brailleSpinners.length)];
+  }, []);
+
+  const currentChar = currentSpinner[frame % currentSpinner.length];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFrame((prev) => prev + 1);
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <span className="inline-flex items-center justify-center gap-[2px] ml-1">
-      <span className="w-[4px] h-[4px] rounded-full bg-muted-foreground animate-bounce [animation-delay:-0.2s]" />
-      <span className="w-[4px] h-[4px] rounded-full bg-muted-foreground animate-bounce [animation-delay:-0.1s]" />
-      <span className="w-[4px] h-[4px] rounded-full bg-muted-foreground animate-bounce" />
+    <span className="inline-flex items-center justify-center ml-1 font-mono text-lg">
+      {currentChar}
     </span>
   );
 };

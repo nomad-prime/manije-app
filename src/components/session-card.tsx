@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import LoadingDots from "@/components/loading-dots";
 
 const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
   const { data: session, isLoading } = useSession(sessionId);
@@ -63,10 +64,7 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
               .join("");
 
             return (
-              <div
-                key={message.id}
-                className={`flex justify-start`}
-              >
+              <div key={message.id} className={`flex justify-start`}>
                 <div
                   className={`max-w-[80%] rounded-lg ${
                     message.role === "user"
@@ -75,9 +73,7 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
                   }`}
                 >
                   {message.role === "assistant" ? (
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                    >
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {textContent}
                     </ReactMarkdown>
                   ) : (
@@ -90,12 +86,9 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
         )}
         {isSending && (
           <div className="flex justify-start">
-            <div className="bg-muted rounded-lg p-4">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce" />
-                <div className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce [animation-delay:0.2s]" />
-                <div className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce [animation-delay:0.4s]" />
-              </div>
+            <div className="flex items-center gap-2">
+              <LoadingDots />
+              <span className="text-muted-foreground text-sm">Thinking...</span>
             </div>
           </div>
         )}
