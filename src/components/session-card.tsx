@@ -2,14 +2,14 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import useSession from "@/hooks/use-session";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const ChatCard = ({ sessionId }: { sessionId: string | null }) => {
+const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
   const { data: session, isLoading } = useSession(sessionId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
@@ -26,7 +26,7 @@ const ChatCard = ({ sessionId }: { sessionId: string | null }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isSending) return;
 
@@ -134,4 +134,4 @@ const ChatCard = ({ sessionId }: { sessionId: string | null }) => {
   );
 };
 
-export default ChatCard;
+export default SessionCard;

@@ -1,17 +1,22 @@
 import { useRouter } from "next/navigation";
 import useCreateProject from "@/hooks/use-create-project";
+import useCreateSession from "@/hooks/use-create-session";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ManijeButton } from "@/components/ui/manije-button";
 import ProjectsCarousel from "@/components/projects-carousel";
 
 export const Home = () => {
   const router = useRouter();
-  const { mutateAsync, isPending } = useCreateProject();
+  const { mutateAsync: createProject, isPending: isCreatingProject } = useCreateProject();
+  const { mutateAsync: createSession, isPending: isCreatingSession } = useCreateSession();
+
+  const isPending = isCreatingProject || isCreatingSession;
 
   const handleCreateProject = async () => {
     try {
-      const project = await mutateAsync();
-      router.push(`/projects/${project.id}`);
+      const project = await createProject();
+      const session = await createSession({ projectId: project.id });
+      router.push(`/projects/${project.id}/chat/${session.id}`);
     } catch (error) {
       console.error("Error creating project:", error);
     }

@@ -3,7 +3,7 @@ import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 
-const useDeleteChatSession = () => {
+const useDeleteSession = () => {
   const fetchWithAuth = useAuthFetch();
   const queryClient = useQueryClient();
 
@@ -23,9 +23,9 @@ const useDeleteChatSession = () => {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.chatSessions.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.sessions.all() });
     },
   });
 };
 
-export default useDeleteChatSession;
+export default useDeleteSession;

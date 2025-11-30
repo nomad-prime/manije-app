@@ -17,23 +17,24 @@ export function useProject(projectId: string | null) {
       }
       const project = await response.json();
 
-      const dataResponse = await fetchWithAuth(`${baseUrl}/projects/${projectId}/extract-data`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fields: ["project_name", "project_description"],
-        }),
-      });
+      // const dataResponse = await fetchWithAuth(`${baseUrl}/projects/${projectId}/extract-data`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     fields: ["project_name", "project_description"],
+      //   }),
+      // });
+      //
+      // if (!dataResponse.ok) {
+      //   // throw new Error("Failed to fetch project data");
+      //   return project;
+      // }
+      // const data = await dataResponse.json();
 
-      if (!dataResponse.ok) {
-        // throw new Error("Failed to fetch project data");
-        return project;
-      }
-      const data = await dataResponse.json();
-
-      return { ...project, data };
+      // return { ...project, data };
+      return project;
     },
   });
 }

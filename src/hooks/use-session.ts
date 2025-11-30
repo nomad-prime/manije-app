@@ -15,7 +15,7 @@ const useSession = (sessionId: string | null) => {
       }
 
       const response = await fetchWithAuth(
-        `${baseUrl}/chat/sessions/${sessionId}`
+        `${baseUrl}/sessions/${sessionId}`
       );
 
       if (!response.ok) {
