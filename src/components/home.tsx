@@ -16,7 +16,7 @@ export const Home = () => {
     try {
       const project = await createProject();
       const session = await createSession({ projectId: project.id });
-      router.push(`/projects/${project.id}/chat/${session.id}`);
+      router.push(`/projects/${project.id}/sessions/${session.id}`);
     } catch (error) {
       console.error("Error creating project:", error);
     }

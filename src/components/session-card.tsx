@@ -65,13 +65,13 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
             return (
               <div
                 key={message.id}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex justify-start`}
               >
                 <div
-                  className={`max-w-[80%] rounded-lg p-4 ${
+                  className={`max-w-[80%] rounded-lg ${
                     message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
+                      ? "bg-primary text-primary-foreground px-4 py-2"
+                      : ""
                   }`}
                 >
                   {message.role === "assistant" ? (
