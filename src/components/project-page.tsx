@@ -18,15 +18,13 @@ export default function ProjectPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
-      <div className="max-w-60 w-full border-r overflow-y-auto">
+    <div className="flex min-h-[calc(100vh-4rem)]">
+      <div className="max-w-60 w-full border-r h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
         <SessionList projectId={projectId} onSelect={handleSessionSelect} />
       </div>
-      <div className="flex-1 flex flex-col overflow-y-auto">
+      <div className="flex-1 flex flex-col relative items-center">
         {sessionId ? (
-          <div className="flex-1 py-4 px-4">
-            <SessionCard sessionId={sessionId} />
-          </div>
+          <SessionCard sessionId={sessionId} />
         ) : (
           <ProjectOverview projectId={projectId} />
         )}
