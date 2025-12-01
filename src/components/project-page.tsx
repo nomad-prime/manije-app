@@ -14,7 +14,11 @@ export default function ProjectPage() {
   const sessionId = segments[2] === "sessions" ? segments[3] : null;
 
   const handleSessionSelect = (sessionId: string) => {
-    window.history.pushState({}, "", `/projects/${projectId}/sessions/${sessionId}`);
+    window.history.pushState(
+      {},
+      "",
+      `/projects/${projectId}/sessions/${sessionId}`,
+    );
   };
 
   return (
@@ -22,13 +26,15 @@ export default function ProjectPage() {
       <div className="max-w-60 w-full border-r h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
         <SessionList projectId={projectId} onSelect={handleSessionSelect} />
       </div>
-      <div className="flex-1 flex flex-col relative items-center">
-        {sessionId ? (
+      {sessionId ? (
+        <div className="flex-1 flex flex-col relative items-center">
           <SessionCard sessionId={sessionId} />
-        ) : (
+        </div>
+      ) : (
+        <div className="flex-1 flex flex-col relative ">
           <ProjectOverview projectId={projectId} />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -11,15 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useParams, useRouter } from "next/navigation";
-import { useProject } from "@/hooks/use-project";
 
 function SelectProject({ id }: { id: string }) {
-  const { data: project } = useProject(id);
-  if (!project) return null;
 
   return (
     <SelectItem value={id}>
-      {(project.data?.project_name as string) || "Unnamed Project"}
+      {id.slice(0, 10)}
     </SelectItem>
   );
 }

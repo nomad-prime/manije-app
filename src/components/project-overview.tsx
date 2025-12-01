@@ -3,6 +3,10 @@
 import { useProject } from "@/hooks/use-project";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ManijeButton } from "@/components/ui/manije-button";
+import useCreateSession from "@/hooks/use-create-session";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface ProjectOverviewProps {
   projectId: string | null;
@@ -10,6 +14,22 @@ interface ProjectOverviewProps {
 
 export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
   const { data: project, isLoading, error } = useProject(projectId);
+  const { mutateAsync: createSession } = useCreateSession();
+  const router = useRouter();
+  const [isCreating, setCreating] = useState(false);
+
+  const handleCreateSession = async () => {
+    if (!projectId) return;
+
+    try {
+      setCreating(true);
+      const session = await createSession({ projectId });
+      router.push(`/projects/${projectId}/sessions/${session.id}`);
+    } catch (error) {
+      console.error("Error creating session:", error);
+      setCreating(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -47,6 +67,21 @@ export const ProjectOverview = ({ projectId }: ProjectOverviewProps) => {
       >
         {projectDescription}
       </motion.p>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        <ManijeButton
+          onClick={handleCreateSession}
+          disabled={isCreating}
+          loading={isCreating}
+          nudge
+          size="lg"
+        >
+          {isCreating ? "Creating..." : "Start New Session"}
+        </ManijeButton>
+      </motion.div>
     </div>
   );
 };

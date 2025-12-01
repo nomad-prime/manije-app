@@ -4,21 +4,23 @@ import useCreateSession from "@/hooks/use-create-session";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { ManijeButton } from "@/components/ui/manije-button";
 import ProjectsCarousel from "@/components/projects-carousel";
+import { useState } from "react";
 
 export const Home = () => {
   const router = useRouter();
-  const { mutateAsync: createProject, isPending: isCreatingProject } = useCreateProject();
-  const { mutateAsync: createSession, isPending: isCreatingSession } = useCreateSession();
-
-  const isPending = isCreatingProject || isCreatingSession;
+  const { mutateAsync: createProject } = useCreateProject();
+  const { mutateAsync: createSession } = useCreateSession();
+  const [isCreating, setCreating] = useState(false);
 
   const handleCreateProject = async () => {
     try {
+      setCreating(true)
       const project = await createProject();
       const session = await createSession({ projectId: project.id });
       router.push(`/projects/${project.id}/sessions/${session.id}`);
     } catch (error) {
       console.error("Error creating project:", error);
+      setCreating(false);
     }
   };
 
@@ -33,16 +35,13 @@ export const Home = () => {
             className="text-center space-y-6"
           >
             <h1 className="text-4xl font-bold">Welcome to Manije</h1>
-            <p className="text-lg text-muted-foreground">
-              Start by creating a new project
-            </p>
             <ManijeButton
               onClick={handleCreateProject}
-              disabled={isPending}
+              disabled={isCreating}
               size="lg"
               className="px-8 py-6 text-lg"
             >
-              {isPending ? "Creating..." : "Create New Project"}
+              {isCreating ? "Creating..." : "Start by creating a new project"}
             </ManijeButton>
           </motion.div>
         </div>

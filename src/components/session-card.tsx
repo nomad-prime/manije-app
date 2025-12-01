@@ -18,11 +18,15 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
     transport: new DefaultChatTransport({
       api: `/api/sessions/${sessionId}`,
     }),
+    onError: (err) => {
+      console.error(err);
+    },
   });
+  const session_messages = session?.messages;
 
   useEffect(() => {
-    if (session?.messages?.length) {
-      const messages = session?.messages.map((msg) => {
+    if (session_messages?.length) {
+      const init_messages = session_messages.map((msg) => {
         const parts = msg.parts
           ? msg.parts.map((part) => ({
               type: part.type as "text",
@@ -36,9 +40,9 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
           parts,
         };
       });
-      setMessages(messages);
+      setMessages(init_messages);
     }
-  }, [session, setMessages]);
+  }, [session_messages, setMessages]);
 
   const isSending = status === "streaming" || status === "submitted";
 
@@ -61,12 +65,10 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
   return (
     <div className="flex-1 flex flex-col w-full relative max-w-[840px]">
       {session?.title && (
-        <div className="border-b p-4">
-          <h2 className="text-lg font-semibold">{session.title}</h2>
-        </div>
+        <h2 className="text-lg p-4 font-semibold">{session.title}</h2>
       )}
 
-      <div className="flex-1 p-4 pb-44 space-y-4 relative">
+      <div className="flex-1 p-4 pb-12 space-y-4 relative">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-muted-foreground">
             Start a conversation with the agent
