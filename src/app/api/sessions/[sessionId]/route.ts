@@ -2,7 +2,10 @@ import { auth } from "@clerk/nextjs/server";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
 
-export async function POST(req: Request) {
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ sessionId: string }> }
+) {
   const { userId, getToken } = await auth();
 
   if (!userId) {
@@ -14,9 +17,15 @@ export async function POST(req: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
+  const { sessionId } = await params;
+
+  if (!sessionId) {
+    return new Response("Missing sessionId", { status: 400 });
+  }
+
   const body = await req.json();
 
-  const response = await fetch(`${baseUrl}/chat/stream`, {
+  const response = await fetch(`${baseUrl}/sessions/${sessionId}/stream`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
