@@ -4,10 +4,13 @@ import { baseUrl } from "@/lib/urls";
 import { queryKeys } from "@/hooks/cache-keys";
 
 export interface ChatMessage {
-  role: "user" | "assistant" | "system" | "tool";
-  content: string;
+  id: string;
+  role: "user" | "assistant" | "system";
+  content?: string;
+  parts?: Array<{ type: string; text: string }>;
   tool_calls?: ToolCall[];
   tool_call_id?: string;
+  created_at?: string;
   timestamp?: string;
 }
 
@@ -20,23 +23,12 @@ export interface ToolCall {
   };
 }
 
-export interface ToolCallRecord {
-  id: string;
-  tool_name: string;
-  arguments: Record<string, unknown>;
-  result?: unknown;
-  error?: string;
-  executed_at: string;
-}
-
 export interface Session {
   id: string;
   tenant_id: string;
   user_id: string;
-  job_id?: string;
-  project_id?: string;
+  project_id: string;
   messages: ChatMessage[];
-  tool_calls: ToolCallRecord[];
   created_at: string;
   updated_at: string;
   title?: string;

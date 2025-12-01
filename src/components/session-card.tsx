@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import useSession from "@/hooks/use-session";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -14,11 +14,31 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({
       api: `/api/sessions/${sessionId}`,
     }),
   });
+
+  useEffect(() => {
+    if (session?.messages?.length) {
+      const messages = session?.messages.map((msg) => {
+        const parts = msg.parts
+          ? msg.parts.map((part) => ({
+              type: part.type as "text",
+              text: part.text,
+            }))
+          : [{ type: "text" as const, text: msg.content || "" }];
+
+        return {
+          id: msg.id,
+          role: msg.role,
+          parts,
+        };
+      });
+      setMessages(messages);
+    }
+  }, [session, setMessages]);
 
   const isSending = status === "streaming" || status === "submitted";
 
@@ -59,10 +79,7 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
               .join("");
 
             return (
-              <div
-                key={message.id}
-                className={`flex justify-start`}
-              >
+              <div key={message.id} className={`flex justify-start`}>
                 {message.role === "assistant" ? (
                   <LlmOutput content={textContent} className="max-w-[80%]" />
                 ) : (
