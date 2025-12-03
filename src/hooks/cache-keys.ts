@@ -27,5 +27,7 @@ export const queryKeys = {
     all: (projectId?: string | null) =>
       projectId ? ["sessions", projectId] : ["sessions"],
     id: (id: string | null) => (id ? ["session", id] : []),
+    messages: (sessionId: string | null) =>
+      sessionId ? ["session", sessionId, "messages"] : [],
   },
 };

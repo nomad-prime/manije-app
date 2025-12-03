@@ -4,13 +4,19 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import useSession from "@/hooks/use-session";
+import useMessages from "@/hooks/use-messages";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import LoadingDots from "@/components/loading-dots";
 import LlmOutput from "@/components/llm-output";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/cache-keys";
 
 const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
-  const { data: session, isLoading } = useSession(sessionId);
+  const { data: session, isLoading: isSessionLoading } = useSession(sessionId);
+  const { data: session_messages, isLoading: isMessagesLoading } =
+    useMessages(sessionId);
+  const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
 
@@ -22,7 +28,6 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
       console.error(err);
     },
   });
-  const session_messages = session?.messages;
 
   useEffect(() => {
     if (session_messages?.length) {
@@ -46,15 +51,28 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
 
   const isSending = status === "streaming" || status === "submitted";
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isSending) return;
 
-    sendMessage({ text: input });
+    await sendMessage({ text: input });
+
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.sessions.messages(sessionId),
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.sessions.all(),
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.sessions.id(sessionId),
+    });
+
     setInput("");
   };
 
-  if (isLoading) {
+  if (isSessionLoading || isMessagesLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-muted-foreground">Loading conversation...</div>
@@ -81,15 +99,23 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
               .join("");
 
             return (
-              <div key={message.id} className={`flex justify-start`}>
-                {message.role === "assistant" ? (
-                  <LlmOutput content={textContent} className="max-w-[80%]" />
-                ) : (
-                  <div className="max-w-[80%] rounded-lg bg-primary text-primary-foreground px-4 py-2">
+              <>
+                {message.role === "assistant" && textContent && (
+                  <LlmOutput
+                    content={textContent}
+                    className="max-w-[80%]"
+                    key={message.id}
+                  />
+                )}
+                {message.role === "user" && (
+                  <div
+                    className="max-w-[80%] rounded-lg bg-primary text-primary-foreground px-4 py-2 "
+                    key={message.id}
+                  >
                     <p className="whitespace-pre-wrap">{textContent}</p>
                   </div>
                 )}
-              </div>
+              </>
             );
           })
         )}
