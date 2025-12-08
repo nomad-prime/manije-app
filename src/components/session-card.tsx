@@ -99,13 +99,9 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
               .join("");
 
             return (
-              <>
+              <div key={message.id}>
                 {message.role === "assistant" && textContent && (
-                  <LlmOutput
-                    content={textContent}
-                    className="max-w-[80%]"
-                    key={message.id}
-                  />
+                    <LlmOutput content={textContent} className="max-w-[80%]" />
                 )}
                 {message.role === "user" && (
                   <div
@@ -115,7 +111,7 @@ const SessionCard = ({ sessionId }: { sessionId: string | null }) => {
                     <p className="whitespace-pre-wrap">{textContent}</p>
                   </div>
                 )}
-              </>
+              </div>
             );
           })
         )}
