@@ -24,7 +24,6 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
-  console.log(initialMessages)
 
   const { messages, sendMessage, status, addToolOutput } = useChat<ProjectUIMessage>({
     transport: new DefaultChatTransport({
