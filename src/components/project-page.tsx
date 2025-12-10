@@ -4,6 +4,20 @@ import { usePathname } from "next/navigation";
 import SessionList from "@/components/session-list";
 import SessionCard from "@/components/session-card";
 import { ProjectOverview } from "@/components/project-overview";
+import useMessages from "@/hooks/use-messages";
+import LoadingDots from "@/components/loading-dots";
+
+function MessageList({ sessionId }: { sessionId: string }) {
+  const { isLoading, data: messages } = useMessages(sessionId);
+
+  if (isLoading) return <LoadingDots />;
+
+  return (
+    <div className="flex-1 flex flex-col relative items-center">
+      <SessionCard sessionId={sessionId} initialMessages={messages ?? []} />
+    </div>
+  );
+}
 
 export default function ProjectPage() {
   const pathname = usePathname();
@@ -27,9 +41,7 @@ export default function ProjectPage() {
         <SessionList projectId={projectId} onSelect={handleSessionSelect} />
       </div>
       {sessionId ? (
-        <div className="flex-1 flex flex-col relative items-center">
-          <SessionCard sessionId={sessionId} />
-        </div>
+        <MessageList sessionId={sessionId} />
       ) : (
         <div className="flex-1 flex flex-col relative ">
           <ProjectOverview projectId={projectId} />
