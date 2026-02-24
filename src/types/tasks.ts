@@ -1,4 +1,4 @@
-export type TaskStatus = "unclaimed" | "claimed" | "in_progress" | "completed";
+export type TaskStatus = "unclaimed" | "claimed" | "in_progress" | "completed" | "failed";
 
 export type TaskType = "genesis" | "follow_up";
 
@@ -15,6 +15,7 @@ export interface AgentTask {
   last_heartbeat_at?: string;
   session_id?: string;
   draft_asset_id?: string;
+  error_message?: string;
   completed_at?: string;
   created_at: string;
   updated_at: string;

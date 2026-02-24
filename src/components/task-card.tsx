@@ -12,6 +12,7 @@ const statusColors: Record<string, string> = {
   claimed: "bg-blue-100 text-blue-800",
   in_progress: "bg-yellow-100 text-yellow-800",
   completed: "bg-green-100 text-green-800",
+  failed: "bg-red-100 text-red-800",
 };
 
 const typeLabels: Record<string, string> = {
@@ -31,6 +32,9 @@ export function TaskCard({ task }: TaskCardProps) {
         </span>
       </div>
       <p className="text-sm">{task.description}</p>
+      {task.error_message && (
+        <p className="text-xs text-red-600">{task.error_message}</p>
+      )}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         {task.claimed_by && <span>Claimed by: {task.claimed_by}</span>}
         <span>{new Date(task.created_at).toLocaleDateString()}</span>
