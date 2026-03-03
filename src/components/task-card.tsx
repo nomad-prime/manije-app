@@ -42,7 +42,6 @@ export function TaskCard({ task }: TaskCardProps) {
       {task.draft_asset_id && (
         <DraftReview
           draftAssetId={task.draft_asset_id}
-          sessionId={task.session_id}
           projectId={task.project_id}
         />
       )}
