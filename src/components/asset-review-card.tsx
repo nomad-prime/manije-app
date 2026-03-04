@@ -17,12 +17,7 @@ interface ProjectAsset {
   title: string;
   description: string;
   type: string;
-  data?: {
-    priority?: string;
-    estimated_hours?: number;
-    dependencies?: string[];
-    [key: string]: unknown;
-  };
+  content?: string;
 }
 
 interface AssetReviewCardProps {
@@ -68,7 +63,7 @@ export function AssetReviewCard({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="pb-2">{JSON.stringify(asset.data)}</div>
+        <div className="pb-2 prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">{asset.content}</div>
         {mode === "reject" ? (
           <div className="space-y-3">
             <Textarea

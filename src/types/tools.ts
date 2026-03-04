@@ -4,7 +4,7 @@ export interface CreateProjectAssetInput {
   title: string;
   description: string;
   type: string;
-  data?: Record<string, unknown>;
+  content?: string;
 }
 
 export interface CreateProjectAssetOutput {

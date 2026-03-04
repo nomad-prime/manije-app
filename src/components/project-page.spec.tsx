@@ -38,10 +38,9 @@ vi.mock("@/hooks/use-job-type", () => ({
 vi.mock("@/hooks/use-project", () => ({
   useProject: vi.fn(() => ({
     data: {
-      data: {
-        project_name: "Test Project",
-        project_description: "Test project description",
-      },
+      id: "proj123-full-uuid-here",
+      open_jobs: 0,
+      done_jobs: 0,
     },
     isLoading: false,
     error: null,
@@ -145,8 +144,7 @@ describe("ProjectPage", () => {
     );
 
     renderWithProviders(<ProjectPage />);
-    expect(screen.getByText("Test Project")).toBeInTheDocument();
-    expect(screen.getByText("Test project description")).toBeInTheDocument();
+    expect(screen.getByText("Project proj123-")).toBeInTheDocument();
   });
 
   it("handles job selection from JobList", async () => {
