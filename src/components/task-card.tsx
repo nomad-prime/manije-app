@@ -43,6 +43,7 @@ export function TaskCard({ task }: TaskCardProps) {
         <DraftReview
           draftAssetId={task.draft_asset_id}
           projectId={task.project_id}
+          sessionId={task.session_id}
         />
       )}
     </div>
