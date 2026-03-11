@@ -36,6 +36,9 @@ const useApproveAsset = ({
         queryClient.invalidateQueries({
           queryKey: queryKeys.sessions.all(projectId),
         }),
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.assets.id(assetId),
+        }),
       ]);
     },
   });
