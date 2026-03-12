@@ -77,7 +77,7 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
         ) : (
           messages.map((message) => (
             <div key={message.id} className="space-y-2">
-              {message.parts.map((part, index) => {
+              {(message.parts ?? []).map((part, index) => {
                 if (part.type === "text") {
                   const textContent = "text" in part ? part.text : "";
                   return (

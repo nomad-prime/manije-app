@@ -30,4 +30,14 @@ export const queryKeys = {
     messages: (sessionId: string | null) =>
       sessionId ? ["session", sessionId, "messages"] : [],
   },
+  tasks: {
+    all: (projectId?: string | null, status?: string, type?: string) => {
+      const key = ["tasks"];
+      if (projectId) key.push(projectId);
+      if (status) key.push(status);
+      if (type) key.push(type);
+      return key;
+    },
+    id: (id: string | null) => (id ? ["task", id] : []),
+  },
 };

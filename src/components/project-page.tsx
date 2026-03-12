@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import SessionList from "@/components/session-list";
 import SessionCard from "@/components/session-card";
 import { ProjectOverview } from "@/components/project-overview";
@@ -27,12 +27,10 @@ export default function ProjectPage() {
 
   const sessionId = segments[2] === "sessions" ? segments[3] : null;
 
+  const router = useRouter();
+
   const handleSessionSelect = (sessionId: string) => {
-    window.history.pushState(
-      {},
-      "",
-      `/projects/${projectId}/sessions/${sessionId}`,
-    );
+    router.push(`/projects/${projectId}/sessions/${sessionId}`);
   };
 
   return (

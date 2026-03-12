@@ -51,7 +51,7 @@ export const CreateProjectAssetToolPart = ({
             title: input.title,
             description: input.description,
             type: input.type,
-            data: input.data,
+            content: input.content,
           }}
           onApprove={() => {
             onAddToolOutput({
