@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import useSession from "@/hooks/use-session";
 import useMessages from "@/hooks/use-messages";
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,16 @@ import { queryKeys } from "@/hooks/cache-keys";
 import { TextMessagePart, CreateProjectAssetToolPart } from "@/components/message-parts";
 import type { ProjectUIMessage } from "@/types/tools";
 
+export interface SessionCardHandle {
+  sendSystemMessage: (text: string) => Promise<void>;
+}
+
 interface SessionCardProps {
   sessionId: string | null;
   initialMessages?: ProjectUIMessage[];
 }
 
-const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
+const SessionCard = forwardRef<SessionCardHandle, SessionCardProps>(({ sessionId, initialMessages }, ref) => {
   const { data: session, isLoading: isSessionLoading } = useSession(sessionId);
   const { isLoading: isMessagesLoading } = useMessages(sessionId);
   const queryClient = useQueryClient();
@@ -35,6 +39,15 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
       console.error(err);
     },
   });
+
+  useImperativeHandle(ref, () => ({
+    sendSystemMessage: async (text: string) => {
+      await sendMessage({
+        role: "system",
+        parts: [{ type: "text", text }],
+      });
+    },
+  }), [sendMessage]);
 
   const isSending = status === "streaming" || status === "submitted";
 
@@ -201,6 +214,8 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
       </div>
     </div>
   );
-};
+});
+
+SessionCard.displayName = "SessionCard";
 
 export default SessionCard;

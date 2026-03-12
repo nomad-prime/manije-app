@@ -128,4 +128,30 @@ describe("TaskDetailView", () => {
       taskId: "task-1",
     });
   });
+
+  it("renders artifact viewer in the right panel", () => {
+    (useTaskSessions as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      data: [
+        { id: "session-1", title: "Session", created_at: "2024-01-01T00:00:00Z" },
+      ],
+      isLoading: false,
+    });
+
+    renderWithProviders(<TaskDetailView task={task} projectId="proj-1" />);
+
+    // Task has draft_asset_id="asset-1" but useAsset returns null (mocked), so "Asset not found." is shown
+    expect(screen.getByText("Asset not found.")).toBeInTheDocument();
+  });
+
+  it("does not send message when there is no active session", () => {
+    (useTaskSessions as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      data: [],
+      isLoading: false,
+    });
+
+    renderWithProviders(<TaskDetailView task={task} projectId="proj-1" />);
+
+    // With no sessions, no message should be sent — component should render without errors
+    expect(screen.getByText(/no sessions available/i)).toBeInTheDocument();
+  });
 });

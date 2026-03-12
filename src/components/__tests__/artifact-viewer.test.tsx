@@ -188,4 +188,49 @@ describe("ArtifactViewer", () => {
       expect(mockApproveMutateAsync).toHaveBeenCalled();
     });
   });
+
+  it("calls onAssetSaved callback after successful save", async () => {
+    const onAssetSaved = vi.fn();
+    (useAsset as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      data: asset,
+      isLoading: false,
+    });
+
+    renderWithProviders(
+      <ArtifactViewer assetId="asset-1" projectId="proj-1" onAssetSaved={onAssetSaved} />
+    );
+
+    fireEvent.click(screen.getByTestId("artifact-rendered"));
+    fireEvent.change(screen.getByTestId("artifact-editor"), {
+      target: { value: "Updated content" },
+    });
+    fireEvent.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(mockMutateAsync).toHaveBeenCalledWith({
+        assetId: "asset-1",
+        content: "Updated content",
+      });
+      expect(onAssetSaved).toHaveBeenCalledWith("Updated content");
+    });
+  });
+
+  it("does not call onAssetSaved when callback is not provided", async () => {
+    (useAsset as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      data: asset,
+      isLoading: false,
+    });
+
+    renderWithProviders(<ArtifactViewer assetId="asset-1" projectId="proj-1" />);
+
+    fireEvent.click(screen.getByTestId("artifact-rendered"));
+    fireEvent.change(screen.getByTestId("artifact-editor"), {
+      target: { value: "Updated content" },
+    });
+    fireEvent.click(screen.getByText("Save"));
+
+    await waitFor(() => {
+      expect(mockMutateAsync).toHaveBeenCalled();
+    });
+  });
 });

@@ -12,9 +12,10 @@ import LlmOutput from "@/components/llm-output";
 interface ArtifactViewerProps {
   assetId: string | null;
   projectId: string;
+  onAssetSaved?: (content: string) => void;
 }
 
-export default function ArtifactViewer({ assetId, projectId }: ArtifactViewerProps) {
+export default function ArtifactViewer({ assetId, projectId, onAssetSaved }: ArtifactViewerProps) {
   const { data: asset, isLoading } = useAsset(assetId ?? null);
   const updateAsset = useUpdateAsset();
   const approveAsset = useApproveAsset({
@@ -61,6 +62,7 @@ export default function ArtifactViewer({ assetId, projectId }: ArtifactViewerPro
 
     await updateAsset.mutateAsync({ assetId, content: editedContent });
     setIsEditing(false);
+    onAssetSaved?.(editedContent);
   };
 
   const handleDiscard = () => {

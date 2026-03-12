@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { Plus } from "lucide-react";
 import TaskHeader from "@/components/task-header";
 import ArtifactViewer from "@/components/artifact-viewer";
 import SessionCard from "@/components/session-card";
+import type { SessionCardHandle } from "@/components/session-card";
 import useMessages from "@/hooks/use-messages";
 import useTaskSessions from "@/hooks/use-task-sessions";
 import useCreateTaskSession from "@/hooks/use-create-task-session";
@@ -18,13 +19,17 @@ interface TaskDetailViewProps {
   projectId: string;
 }
 
-function SessionArea({ sessionId }: { sessionId: string }) {
-  const { isLoading, data: messages } = useMessages(sessionId);
+const SessionArea = forwardRef<SessionCardHandle, { sessionId: string }>(
+  ({ sessionId }, ref) => {
+    const { isLoading, data: messages } = useMessages(sessionId);
 
-  if (isLoading) return <LoadingDots />;
+    if (isLoading) return <LoadingDots />;
 
-  return <SessionCard sessionId={sessionId} initialMessages={messages ?? []} />;
-}
+    return <SessionCard ref={ref} sessionId={sessionId} initialMessages={messages ?? []} />;
+  }
+);
+
+SessionArea.displayName = "SessionArea";
 
 function SessionSelector({
   sessions,
@@ -74,6 +79,14 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
 
   const createSession = useCreateTaskSession();
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const sessionCardRef = useRef<SessionCardHandle>(null);
+
+  const handleAssetSaved = useCallback((content: string) => {
+    if (!selectedSessionId || !sessionCardRef.current) return;
+    sessionCardRef.current.sendSystemMessage(
+      `I've updated the draft asset. Here is the current version:\n\n${content}`
+    );
+  }, [selectedSessionId]);
 
   useEffect(() => {
     if (sessions && sessions.length > 0 && !selectedSessionId) {
@@ -127,7 +140,7 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
                 isCreating={createSession.isPending}
               />
               <div className="flex-1 flex flex-col relative items-center overflow-y-auto">
-                {selectedSessionId && <SessionArea sessionId={selectedSessionId} />}
+                {selectedSessionId && <SessionArea ref={sessionCardRef} sessionId={selectedSessionId} />}
               </div>
             </>
           )}
@@ -135,7 +148,7 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
 
         {/* Right: Artifact viewer */}
         <div className="w-[45%] shrink-0 overflow-y-auto">
-          <ArtifactViewer assetId={task.draft_asset_id ?? null} projectId={projectId} />
+          <ArtifactViewer assetId={task.draft_asset_id ?? null} projectId={projectId} onAssetSaved={handleAssetSaved} />
         </div>
       </div>
     </div>

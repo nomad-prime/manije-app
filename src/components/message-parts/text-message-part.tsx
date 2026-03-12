@@ -20,5 +20,13 @@ export const TextMessagePart = ({ text, role }: TextMessagePartProps) => {
     );
   }
 
+  if (role === "system") {
+    return (
+      <div className="w-full text-center">
+        <p className="text-sm italic text-muted-foreground">{text}</p>
+      </div>
+    );
+  }
+
   return null;
 };

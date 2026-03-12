@@ -76,8 +76,8 @@ export const CreateProjectAssetToolPart = ({
 
     case "output-available":
       return (
-        <div className="text-sm text-green-600 dark:text-green-400 max-w-[80%] p-3 rounded-lg bg-green-50 dark:bg-green-950/20">
-          {output}
+        <div className="text-sm italic text-muted-foreground">
+          Asset created — see artifact panel.
         </div>
       );
 

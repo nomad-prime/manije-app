@@ -62,7 +62,7 @@ const TaskSidebar = ({ projectId, selectedTaskId, onSelect }: TaskSidebarProps) 
             <span
               className={`w-2 h-2 rounded-full shrink-0 ${statusColors[task.status] || "bg-gray-400"}`}
             />
-            <span className="overflow-hidden whitespace-nowrap text-ellipsis block text-sm">
+            <span className="block text-sm leading-snug">
               {task.description}
             </span>
           </Button>
