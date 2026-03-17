@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DraftReview } from "@/components/draft-review";
+import { AssetReview } from "@/components/asset-review";
 import type { AgentTask } from "@/types/tasks";
 
 type TaskCardProps = {
@@ -39,9 +39,9 @@ export function TaskCard({ task }: TaskCardProps) {
         {task.claimed_by && <span>Claimed by: {task.claimed_by}</span>}
         <span>{new Date(task.created_at).toLocaleDateString()}</span>
       </div>
-      {task.draft_asset_id && (
-        <DraftReview
-          draftAssetId={task.draft_asset_id}
+      {task.asset_id && (
+        <AssetReview
+          assetId={task.asset_id}
           projectId={task.project_id}
           sessionId={task.session_id}
         />

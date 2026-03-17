@@ -84,7 +84,7 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
   const handleAssetSaved = useCallback((content: string) => {
     if (!selectedSessionId || !sessionCardRef.current) return;
     sessionCardRef.current.sendSystemMessage(
-      `I've updated the draft asset. Here is the current version:\n\n${content}`
+      `I've updated the asset. Here is the current version:\n\n${content}`
     );
   }, [selectedSessionId]);
 
@@ -148,7 +148,7 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
 
         {/* Right: Artifact viewer */}
         <div className="w-[45%] shrink-0 overflow-y-auto">
-          <ArtifactViewer assetId={task.draft_asset_id ?? null} projectId={projectId} onAssetSaved={handleAssetSaved} />
+          <ArtifactViewer assetId={task.asset_id ?? null} projectId={projectId} onAssetSaved={handleAssetSaved} />
         </div>
       </div>
     </div>

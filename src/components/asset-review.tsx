@@ -1,18 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 import { ApprovalButton } from "@/components/approval-button";
 
-type DraftReviewProps = {
-  draftAssetId: string;
+type AssetReviewProps = {
+  assetId: string;
   projectId: string;
   sessionId?: string;
 };
 
-export function DraftReview({ draftAssetId, projectId, sessionId }: DraftReviewProps) {
+export function AssetReview({ assetId, projectId, sessionId }: AssetReviewProps) {
   return (
     <div className="mt-2 border-t pt-2 space-y-2">
       <div className="flex items-center gap-2">
-        <Badge variant="secondary">Draft Asset</Badge>
-        <span className="text-xs text-muted-foreground">{draftAssetId.slice(0, 8)}...</span>
+        <Badge variant="secondary">Asset</Badge>
+        <span className="text-xs text-muted-foreground">{assetId.slice(0, 8)}...</span>
         {sessionId && (
           <a
             href={`/projects/${projectId}/sessions/${sessionId}`}
@@ -22,7 +22,7 @@ export function DraftReview({ draftAssetId, projectId, sessionId }: DraftReviewP
           </a>
         )}
       </div>
-      <ApprovalButton assetId={draftAssetId} projectId={projectId} />
+      <ApprovalButton assetId={assetId} projectId={projectId} />
     </div>
   );
 }

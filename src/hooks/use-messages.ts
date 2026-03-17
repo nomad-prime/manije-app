@@ -25,6 +25,9 @@ const useMessages = (sessionId: string | null) => {
       return response.json();
     },
     enabled: !!sessionId,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 };
 

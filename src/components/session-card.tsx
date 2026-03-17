@@ -4,7 +4,6 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { FormEvent, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import useSession from "@/hooks/use-session";
-import useMessages from "@/hooks/use-messages";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import LoadingDots from "@/components/loading-dots";
@@ -24,7 +23,6 @@ interface SessionCardProps {
 
 const SessionCard = forwardRef<SessionCardHandle, SessionCardProps>(({ sessionId, initialMessages }, ref) => {
   const { data: session, isLoading: isSessionLoading } = useSession(sessionId);
-  const { isLoading: isMessagesLoading } = useMessages(sessionId);
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
@@ -61,14 +59,10 @@ const SessionCard = forwardRef<SessionCardHandle, SessionCardProps>(({ sessionId
       queryKey: queryKeys.sessions.all(),
     });
 
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.sessions.id(sessionId),
-    });
-
     setInput("");
   };
 
-  if (isSessionLoading || isMessagesLoading) {
+  if (isSessionLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-muted-foreground">Loading conversation...</div>

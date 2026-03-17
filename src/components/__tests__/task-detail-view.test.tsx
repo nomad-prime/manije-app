@@ -40,7 +40,7 @@ const task: AgentTask = {
   description: "Write user guide documentation",
   status: "in_progress",
   claimed_by: "agent-alpha",
-  draft_asset_id: "asset-1",
+  asset_id: "asset-1",
   created_at: "2024-01-01T00:00:00Z",
   updated_at: "2024-01-01T00:00:00Z",
 };
@@ -74,8 +74,8 @@ describe("TaskDetailView", () => {
     expect(screen.getByText(/start a session/i)).toBeInTheDocument();
   });
 
-  it("shows no-asset empty state when no draft_asset_id", () => {
-    const taskWithoutAsset = { ...task, draft_asset_id: undefined };
+  it("shows no-asset empty state when no asset_id", () => {
+    const taskWithoutAsset = { ...task, asset_id: undefined };
 
     (useTaskSessions as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       data: [],
@@ -139,7 +139,7 @@ describe("TaskDetailView", () => {
 
     renderWithProviders(<TaskDetailView task={task} projectId="proj-1" />);
 
-    // Task has draft_asset_id="asset-1" but useAsset returns null (mocked), so "Asset not found." is shown
+    // Task has asset_id="asset-1" but useAsset returns null (mocked), so "Asset not found." is shown
     expect(screen.getByText("Asset not found.")).toBeInTheDocument();
   });
 
