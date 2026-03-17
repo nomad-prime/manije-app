@@ -10,13 +10,15 @@ interface UseTasksOptions {
   projectId: string | null;
   status?: TaskStatus;
   type?: TaskType;
+  refetchInterval?: number;
 }
 
-export function useTasks({ projectId, status, type }: UseTasksOptions) {
+export function useTasks({ projectId, status, type, refetchInterval }: UseTasksOptions) {
   const fetchWithAuth = useAuthFetch();
 
   return useQuery<AgentTask[]>({
     queryKey: queryKeys.tasks.all(projectId, status, type),
+    refetchInterval,
     queryFn: async () => {
       if (!projectId) return [];
 

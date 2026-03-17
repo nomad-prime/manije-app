@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle } from "lucide-react";
 
 interface ProjectAsset {
@@ -63,7 +62,6 @@ export function AssetReviewCard({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="pb-2 prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">{asset.content}</div>
         {mode === "reject" ? (
           <div className="space-y-3">
             <Textarea

@@ -7,6 +7,7 @@ export interface AgentTask {
   project_id: string;
   tenant_id: string;
   type: TaskType;
+  title: string;
   description: string;
   created_by_agent?: string;
   status: TaskStatus;
@@ -14,7 +15,7 @@ export interface AgentTask {
   claimed_at?: string;
   last_heartbeat_at?: string;
   session_id?: string;
-  draft_asset_id?: string;
+  asset_id?: string;
   error_message?: string;
   completed_at?: string;
   created_at: string;

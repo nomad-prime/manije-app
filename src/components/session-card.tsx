@@ -2,9 +2,8 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import useSession from "@/hooks/use-session";
-import useMessages from "@/hooks/use-messages";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import LoadingDots from "@/components/loading-dots";
@@ -13,14 +12,17 @@ import { queryKeys } from "@/hooks/cache-keys";
 import { TextMessagePart, CreateProjectAssetToolPart } from "@/components/message-parts";
 import type { ProjectUIMessage } from "@/types/tools";
 
+export interface SessionCardHandle {
+  sendSystemMessage: (text: string) => Promise<void>;
+}
+
 interface SessionCardProps {
   sessionId: string | null;
   initialMessages?: ProjectUIMessage[];
 }
 
-const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
+const SessionCard = forwardRef<SessionCardHandle, SessionCardProps>(({ sessionId, initialMessages }, ref) => {
   const { data: session, isLoading: isSessionLoading } = useSession(sessionId);
-  const { isLoading: isMessagesLoading } = useMessages(sessionId);
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
@@ -36,6 +38,15 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
     },
   });
 
+  useImperativeHandle(ref, () => ({
+    sendSystemMessage: async (text: string) => {
+      await sendMessage({
+        role: "system",
+        parts: [{ type: "text", text }],
+      });
+    },
+  }), [sendMessage]);
+
   const isSending = status === "streaming" || status === "submitted";
 
   const handleSubmit = async (e: FormEvent) => {
@@ -48,14 +59,10 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
       queryKey: queryKeys.sessions.all(),
     });
 
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.sessions.id(sessionId),
-    });
-
     setInput("");
   };
 
-  if (isSessionLoading || isMessagesLoading) {
+  if (isSessionLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-muted-foreground">Loading conversation...</div>
@@ -201,6 +208,8 @@ const SessionCard = ({ sessionId, initialMessages }: SessionCardProps) => {
       </div>
     </div>
   );
-};
+});
+
+SessionCard.displayName = "SessionCard";
 
 export default SessionCard;
