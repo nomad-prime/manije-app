@@ -24,11 +24,8 @@ export default function TaskHeader({ task }: TaskHeaderProps) {
   return (
     <div className="border-b px-4 py-3 flex items-center justify-between gap-4">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium truncate">{task.description}</p>
-        <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-          {task.claimed_by && <span>Agent: {task.claimed_by}</span>}
-          <span>{new Date(task.created_at).toLocaleDateString()}</span>
-        </div>
+        <p className="text-sm font-bold truncate">{task.title || task.description}</p>
+        <p className="text-xs text-muted-foreground mt-0.5 truncate">{task.description}</p>
       </div>
       <div className="flex items-center gap-2 shrink-0">
         <Badge variant="outline">{typeLabels[task.type] || task.type}</Badge>

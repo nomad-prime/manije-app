@@ -59,7 +59,7 @@ export default function ProjectPage() {
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
-      <div className="max-w-72 w-full border-r h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
+      <div className="w-80 shrink-0 border-r h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
         <TaskSidebar
           projectId={projectId}
           selectedTaskId={taskId}

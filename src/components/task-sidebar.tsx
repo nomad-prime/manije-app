@@ -56,14 +56,14 @@ const TaskSidebar = ({ projectId, selectedTaskId, onSelect }: TaskSidebarProps) 
           <Button
             key={task.id}
             variant={task.id === selectedTaskId ? "secondary" : "ghost"}
-            className="w-full justify-start text-left hover:bg-muted h-auto py-2 px-3"
+            className="w-full justify-start text-left hover:bg-muted h-auto py-2 px-3 whitespace-normal items-start"
             onClick={() => onSelect(task.id)}
           >
             <span
               className={`w-2 h-2 rounded-full shrink-0 ${statusColors[task.status] || "bg-gray-400"}`}
             />
-            <span className="block text-sm leading-snug">
-              {task.description}
+            <span className="block text-sm leading-snug line-clamp-2">
+              {task.title || task.description}
             </span>
           </Button>
         ))}

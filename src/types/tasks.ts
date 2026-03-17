@@ -7,6 +7,7 @@ export interface AgentTask {
   project_id: string;
   tenant_id: string;
   type: TaskType;
+  title: string;
   description: string;
   created_by_agent?: string;
   status: TaskStatus;
