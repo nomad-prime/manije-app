@@ -29,8 +29,6 @@ export const queryKeys = {
     id: (id: string | null) => (id ? ["session", id] : []),
     messages: (sessionId: string | null) =>
       sessionId ? ["session", sessionId, "messages"] : [],
-    byTask: (taskId: string | null) =>
-      taskId ? ["sessions", "task", taskId] : [],
   },
   tasks: {
     all: (projectId?: string | null, status?: string, type?: string) => {

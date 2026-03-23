@@ -7,8 +7,9 @@ import ArtifactViewer from "@/components/artifact-viewer";
 import SessionCard from "@/components/session-card";
 import type { SessionCardHandle } from "@/components/session-card";
 import useMessages from "@/hooks/use-messages";
-import useTaskSessions from "@/hooks/use-task-sessions";
-import useCreateTaskSession from "@/hooks/use-create-task-session";
+import useSessions from "@/hooks/use-sessions";
+import useCreateSession from "@/hooks/use-create-session";
+import useContextSummary from "@/hooks/use-context-summary";
 import LoadingDots from "@/components/loading-dots";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -19,13 +20,26 @@ interface TaskDetailViewProps {
   projectId: string;
 }
 
-const SessionArea = forwardRef<SessionCardHandle, { sessionId: string }>(
-  ({ sessionId }, ref) => {
+const SessionArea = forwardRef<SessionCardHandle, { sessionId: string; contextQuery?: string }>(
+  ({ sessionId, contextQuery }, ref) => {
     const { isLoading, data: messages } = useMessages(sessionId);
+    const { data: summary } = useContextSummary({
+      sessionId,
+      context: contextQuery ?? null,
+    });
 
     if (isLoading) return <LoadingDots />;
 
-    return <SessionCard ref={ref} sessionId={sessionId} initialMessages={messages ?? []} />;
+    return (
+      <>
+        {summary && (
+          <div className="px-4 py-3 mx-4 mt-3 text-sm text-muted-foreground bg-muted/50 rounded-md border">
+            {summary}
+          </div>
+        )}
+        <SessionCard ref={ref} sessionId={sessionId} initialMessages={messages ?? []} />
+      </>
+    );
   }
 );
 
@@ -72,12 +86,9 @@ function SessionSelector({
 }
 
 export default function TaskDetailView({ task, projectId }: TaskDetailViewProps) {
-  const { data: sessions, isLoading: isSessionsLoading, error: sessionsError } = useTaskSessions({
-    projectId,
-    taskId: task.id,
-  });
+  const { data: sessions, isLoading: isSessionsLoading, error: sessionsError } = useSessions(projectId);
 
-  const createSession = useCreateTaskSession();
+  const createSession = useCreateSession();
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const sessionCardRef = useRef<SessionCardHandle>(null);
 
@@ -97,7 +108,6 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
   const handleNewSession = async () => {
     const newSession = await createSession.mutateAsync({
       projectId,
-      taskId: task.id,
     });
     setSelectedSessionId(newSession.id);
   };
@@ -119,7 +129,7 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
             </div>
           ) : !sessions || sessions.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-3 text-sm text-muted-foreground">
-              <p>Task not started yet. No sessions available.</p>
+              <p>No sessions yet. Start a conversation about this task.</p>
               <Button
                 size="sm"
                 variant="outline"
@@ -140,7 +150,7 @@ export default function TaskDetailView({ task, projectId }: TaskDetailViewProps)
                 isCreating={createSession.isPending}
               />
               <div className="flex-1 flex flex-col relative items-center overflow-y-auto">
-                {selectedSessionId && <SessionArea ref={sessionCardRef} sessionId={selectedSessionId} />}
+                {selectedSessionId && <SessionArea ref={sessionCardRef} sessionId={selectedSessionId} contextQuery={task.title} />}
               </div>
             </>
           )}
