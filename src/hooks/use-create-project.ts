@@ -9,10 +9,10 @@ const useCreateProject = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (): Promise<Project> => {
+    mutationFn: async (description: string): Promise<Project> => {
       const response = await fetchWithAuth(`${baseUrl}/projects/`, {
         method: "POST",
-        body: JSON.stringify({}),
+        body: JSON.stringify({ description }),
       });
       
       if (!response.ok) {

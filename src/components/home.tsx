@@ -2,8 +2,8 @@ import { useRouter } from "next/navigation";
 import useCreateProject from "@/hooks/use-create-project";
 import useCreateSession from "@/hooks/use-create-session";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { ManijeButton } from "@/components/ui/manije-button";
 import ProjectsCarousel from "@/components/projects-carousel";
+import PromptInput from "@/components/prompt-input";
 import { useState } from "react";
 
 export const Home = () => {
@@ -12,10 +12,10 @@ export const Home = () => {
   const { mutateAsync: createSession } = useCreateSession();
   const [isCreating, setCreating] = useState(false);
 
-  const handleCreateProject = async () => {
+  const handleCreateProject = async (prompt: string) => {
     try {
-      setCreating(true)
-      const project = await createProject();
+      setCreating(true);
+      const project = await createProject(prompt);
       const session = await createSession({ projectId: project.id });
       router.push(`/projects/${project.id}/sessions/${session.id}`);
     } catch (error) {
@@ -35,14 +35,11 @@ export const Home = () => {
             className="text-center space-y-6"
           >
             <h1 className="text-4xl font-bold">Welcome to Manije</h1>
-            <ManijeButton
-              onClick={handleCreateProject}
+            <PromptInput
+              onSubmit={handleCreateProject}
               disabled={isCreating}
-              size="lg"
-              className="px-8 py-6 text-lg"
-            >
-              {isCreating ? "Creating..." : "Start by creating a new project"}
-            </ManijeButton>
+              placeholder="Describe your project..."
+            />
           </motion.div>
         </div>
       </AnimatePresence>
