@@ -41,6 +41,17 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Surface hierarchy tokens */
+  --color-surface: var(--surface);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-bright: var(--surface-bright);
+  --color-glow: var(--glow);
+  --color-glow-secondary: var(--glow-secondary);
 }
 
 :root {
@@ -64,6 +75,7 @@
   --input: #d1d1d1;
   --ring: #86bdb5;
   --glow: #86bdb5;
+  --glow-secondary: #86bdb5;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -77,12 +89,21 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Light mode surface hierarchy */
+  --surface: #faf9f7;
+  --surface-container: #f5f4f1;
+  --surface-container-low: #f0efec;
+  --surface-container-high: #eceae7;
+  --surface-container-highest: #e7e5e2;
+  --surface-container-lowest: #ffffff;
+  --surface-bright: #faf9f7;
 }
 
 .dark {
   --background: #0b201c;
   --foreground: #e7f1ef;
-  --card: #0e1a17;
+  --card: #0e231f;
   --card-foreground: oklch(0.985 0 0);
   --popover: #152722;
   --popover-foreground: oklch(0.985 0 0);
@@ -98,7 +119,8 @@
   --border: oklch(1 0 0 / 10%);
   --input: #0e1a17;
   --ring: #86bdb5;
-  --glow: #c8fffb;
+  --glow: #86bdb5;
+  --glow-secondary: #c8fffb;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -112,6 +134,15 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Dark mode surface hierarchy (from Stitch Manije) */
+  --surface: #031713;
+  --surface-container: #0e231f;
+  --surface-container-low: #0a1f1b;
+  --surface-container-high: #192e29;
+  --surface-container-highest: #243934;
+  --surface-container-lowest: #00110e;
+  --surface-bright: #293d38;
 }
 
 @layer base {
@@ -136,6 +167,18 @@ body {
   button {
     cursor: pointer;
   }
+}
+
+/* Glassmorphism utility for floating elements */
+.glass {
+  background: color-mix(in srgb, var(--surface-container) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Ghost border utility — 15% opacity outline for a11y */
+.ghost-border {
+  box-shadow: inset 0 0 0 1px oklch(0.5 0 0 / 15%);
 }
 
 @keyframes shimmer {

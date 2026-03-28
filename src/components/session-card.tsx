@@ -9,7 +9,13 @@ import { ArrowRight } from "lucide-react";
 import LoadingDots from "@/components/loading-dots";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks/cache-keys";
-import { TextMessagePart, CreateProjectAssetToolPart } from "@/components/message-parts";
+import {
+  TextMessagePart,
+  CreateProjectAssetToolPart,
+  ShowAssetToolPart,
+  ShowTaskToolPart,
+  HideContextToolPart,
+} from "@/components/message-parts";
 import type { ProjectUIMessage } from "@/types/tools";
 
 export interface SessionCardHandle {
@@ -100,9 +106,37 @@ const SessionCard = forwardRef<SessionCardHandle, SessionCardProps>(({ sessionId
                       state={part.state}
                       toolCallId={part.toolCallId}
                       input={part.state === "input-available" ? part.input : undefined}
-                      output={part.state === "output-available" ? part.output.content : undefined}
                       errorText={part.state === "output-error" ? part.errorText : undefined}
                       onAddToolOutput={addToolOutput}
+                    />
+                  );
+                }
+
+                if (part.type === "tool-show_asset") {
+                  return (
+                    <ShowAssetToolPart
+                      key={part.toolCallId}
+                      state={part.state}
+                      output={part.state === "output-available" ? part.output : undefined}
+                      errorText={part.state === "output-error" ? part.errorText : undefined}
+                    />
+                  );
+                }
+                if (part.type === "tool-show_task") {
+                  return (
+                    <ShowTaskToolPart
+                      key={part.toolCallId}
+                      state={part.state}
+                      output={part.state === "output-available" ? part.output : undefined}
+                      errorText={part.state === "output-error" ? part.errorText : undefined}
+                    />
+                  );
+                }
+                if (part.type === "tool-hide_context") {
+                  return (
+                    <HideContextToolPart
+                      key={part.toolCallId}
+                      state={part.state}
                     />
                   );
                 }
@@ -175,14 +209,14 @@ const SessionCard = forwardRef<SessionCardHandle, SessionCardProps>(({ sessionId
       </div>
 
       <div className="sticky bottom-0 left-0 right-0 px-4">
-        <form onSubmit={handleSubmit} className={"bg-background pb-4"}>
+        <form onSubmit={handleSubmit} className="glass rounded-xl pb-4 pt-2 px-2">
           <div className="relative">
             <textarea
               id={"input"}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="w-full p-3 pr-12 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary bg-popover"
+              className="w-full p-3 pr-12 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[var(--glow)]/40 bg-surface-container-highest"
               rows={3}
               disabled={status !== "ready"}
               onKeyDown={(e) => {

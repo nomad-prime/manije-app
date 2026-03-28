@@ -33,10 +33,9 @@ export const CreateProjectAssetToolPart = ({
   state,
   toolCallId,
   input,
-  output,
   errorText,
   onAddToolOutput,
-}: CreateProjectAssetToolPartProps) => {
+}: Omit<CreateProjectAssetToolPartProps, "output">) => {
   switch (state) {
     case "input-streaming":
       return (

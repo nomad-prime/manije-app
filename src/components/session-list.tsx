@@ -29,7 +29,7 @@ const SessionList = ({
   }
 
   return (
-    <ScrollArea className="max-w-60 border-r">
+    <ScrollArea className="max-w-60">
       <div className="p-2 space-y-2">
         {sessions.map((session) => (
           <Button

@@ -158,7 +158,7 @@ export default function ArtifactViewer({ assetId, projectId, onAssetSaved }: Art
 
       {isEditing ? (
         <textarea
-          className="flex-1 w-full p-3 border rounded-lg resize-none font-mono text-sm focus:outline-none focus:ring-2 focus:ring-primary bg-popover"
+          className="flex-1 w-full p-3 rounded-lg resize-none font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[var(--glow)]/40 bg-surface-container-lowest ghost-border"
           value={editedContent}
           onChange={(e) => setEditedContent(e.target.value)}
           data-testid="artifact-editor"
