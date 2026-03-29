@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { FileText } from "lucide-react";
-import { useContextPanel } from "@/hooks/use-context-panel";
+import { useAssetPanel } from "@/hooks/use-asset-panel";
 import type { ShowAssetOutput } from "@/types/tools";
 
 type ToolPartState = "input-streaming" | "input-available" | "output-available" | "output-error";
@@ -14,7 +14,7 @@ interface ShowAssetToolPartProps {
 }
 
 export const ShowAssetToolPart = ({ state, output, errorText }: ShowAssetToolPartProps) => {
-  const { showAsset } = useContextPanel();
+  const { showAsset } = useAssetPanel();
 
   useEffect(() => {
     if (state === "output-available" && output) {

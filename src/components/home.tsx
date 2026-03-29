@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import useCreateProject from "@/hooks/use-create-project";
-import useCreateSession from "@/hooks/use-create-session";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import ProjectsCarousel from "@/components/projects-carousel";
 import PromptInput from "@/components/prompt-input";
@@ -9,15 +8,13 @@ import { useState } from "react";
 export const Home = () => {
   const router = useRouter();
   const { mutateAsync: createProject } = useCreateProject();
-  const { mutateAsync: createSession } = useCreateSession();
   const [isCreating, setCreating] = useState(false);
 
   const handleCreateProject = async (prompt: string) => {
     try {
       setCreating(true);
       const project = await createProject(prompt);
-      const session = await createSession({ projectId: project.id });
-      router.push(`/projects/${project.id}/sessions/${session.id}`);
+      router.push(`/projects/${project.id}`);
     } catch (error) {
       console.error("Error creating project:", error);
       setCreating(false);

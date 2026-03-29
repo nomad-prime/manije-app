@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useContextPanel } from "@/hooks/use-context-panel";
+import { useAssetPanel } from "@/hooks/use-asset-panel";
+import { useTaskPanel } from "@/hooks/use-task-panel";
 
 type ToolPartState = "input-streaming" | "input-available" | "output-available" | "output-error";
 
@@ -10,13 +11,15 @@ interface HideContextToolPartProps {
 }
 
 export const HideContextToolPart = ({ state }: HideContextToolPartProps) => {
-  const { hideContext } = useContextPanel();
+  const { hideAsset } = useAssetPanel();
+  const { hideTask } = useTaskPanel();
 
   useEffect(() => {
     if (state === "output-available") {
-      hideContext();
+      hideAsset();
+      hideTask();
     }
-  }, [state, hideContext]);
+  }, [state, hideAsset, hideTask]);
 
   return null;
 };

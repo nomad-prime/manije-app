@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { ListChecks } from "lucide-react";
-import { useContextPanel } from "@/hooks/use-context-panel";
+import { useTaskPanel } from "@/hooks/use-task-panel";
 import type { ShowTaskOutput } from "@/types/tools";
 
 type ToolPartState = "input-streaming" | "input-available" | "output-available" | "output-error";
@@ -22,7 +22,7 @@ const statusLabels: Record<string, string> = {
 };
 
 export const ShowTaskToolPart = ({ state, output, errorText }: ShowTaskToolPartProps) => {
-  const { showTask } = useContextPanel();
+  const { showTask } = useTaskPanel();
 
   useEffect(() => {
     if (state === "output-available" && output) {

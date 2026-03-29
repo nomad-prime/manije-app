@@ -3,7 +3,8 @@
 import { FileText, ListChecks, AlertCircle, CheckCircle, Clock } from "lucide-react";
 import { useTasks } from "@/hooks/use-tasks";
 import { useAssets } from "@/hooks/use-assets";
-import { useContextPanel } from "@/hooks/use-context-panel";
+import { useAssetPanel } from "@/hooks/use-asset-panel";
+import { useTaskPanel } from "@/hooks/use-task-panel";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AgentTask } from "@/types/tasks";
 import type { ProjectAsset } from "@/hooks/use-asset";
@@ -25,7 +26,7 @@ function StatCard({ label, count, icon: Icon }: { label: string; count: number; 
 }
 
 function AssetItem({ asset }: { asset: ProjectAsset }) {
-  const { showAsset } = useContextPanel();
+  const { showAsset } = useAssetPanel();
 
   return (
     <button
@@ -60,7 +61,7 @@ function AssetItem({ asset }: { asset: ProjectAsset }) {
 }
 
 function TaskItem({ task }: { task: AgentTask }) {
-  const { showTask } = useContextPanel();
+  const { showTask } = useTaskPanel();
 
   const statusIcons: Record<string, React.ElementType> = {
     in_progress: Clock,
