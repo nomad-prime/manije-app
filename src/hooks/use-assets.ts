@@ -8,19 +8,23 @@ import type { ProjectAsset } from "@/hooks/use-asset";
 
 interface UseAssetsOptions {
   projectId: string | null;
+  status?: string;
   refetchInterval?: number;
 }
 
-export function useAssets({ projectId, refetchInterval }: UseAssetsOptions) {
+export function useAssets({ projectId, status, refetchInterval }: UseAssetsOptions) {
   const fetchWithAuth = useAuthFetch();
 
   return useQuery<ProjectAsset[]>({
-    queryKey: queryKeys.assets.all(projectId),
+    queryKey: queryKeys.assets.all(projectId, status),
     refetchInterval,
     queryFn: async () => {
       if (!projectId) return [];
 
-      const response = await fetchWithAuth(`${baseUrl}/projects/${projectId}/assets`);
+      const url = status
+        ? `${baseUrl}/projects/${projectId}/assets?status=${status}`
+        : `${baseUrl}/projects/${projectId}/assets`;
+      const response = await fetchWithAuth(url);
       if (!response.ok) {
         throw new Error("Failed to fetch assets");
       }

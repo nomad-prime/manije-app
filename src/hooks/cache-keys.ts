@@ -41,8 +41,12 @@ export const queryKeys = {
     id: (id: string | null) => (id ? ["task", id] : []),
   },
   assets: {
-    all: (projectId?: string | null) =>
-      projectId ? ["assets", projectId] : ["assets"],
+    all: (projectId?: string | null, status?: string) => {
+      const key: string[] = ["assets"];
+      if (projectId) key.push(projectId);
+      if (status) key.push(status);
+      return key;
+    },
     id: (id: string | null) => (id ? ["asset", id] : []),
   },
 };

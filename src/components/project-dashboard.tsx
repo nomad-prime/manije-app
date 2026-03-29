@@ -101,6 +101,7 @@ export default function ProjectDashboard({ projectId }: ProjectDashboardProps) {
   });
   const { data: assets, isLoading: assetsLoading } = useAssets({
     projectId,
+    status: "pending_review",
     refetchInterval: 10_000,
   });
 
@@ -118,9 +119,7 @@ export default function ProjectDashboard({ projectId }: ProjectDashboardProps) {
   }
 
   const allTasks = tasks ?? [];
-  const allAssets = assets ?? [];
-
-  const pendingAssets = allAssets.filter((a) => a.status === "pending_review");
+  const pendingAssets = assets ?? [];
   const activeTasks = allTasks.filter((t) => t.status === "in_progress" || t.status === "claimed");
   const completedTasks = allTasks.filter((t) => t.status === "completed");
   const failedTasks = allTasks.filter((t) => t.status === "failed");

@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, XCircle } from "lucide-react";
+import LlmOutput from "@/components/llm-output";
 
 interface ProjectAsset {
   title: string;
@@ -87,15 +88,22 @@ export function AssetReviewCard({
             </div>
           </div>
         ) : (
-          <div className="flex gap-2">
-            <Button onClick={onApprove} variant="default" size="sm">
-              <CheckCircle className="w-4 h-4 mr-2" />
-              Approve
-            </Button>
-            <Button onClick={handleReject} variant="outline" size="sm">
-              <XCircle className="w-4 h-4 mr-2" />
-              Reject
-            </Button>
+          <div className="space-y-3">
+            {asset.content && (
+              <div className="prose prose-sm dark:prose-invert max-w-none max-h-64 overflow-y-auto rounded-md bg-muted/40 p-3">
+                <LlmOutput content={asset.content} className="" />
+              </div>
+            )}
+            <div className="flex gap-2">
+              <Button onClick={onApprove} variant="default" size="sm">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Approve
+              </Button>
+              <Button onClick={handleReject} variant="outline" size="sm">
+                <XCircle className="w-4 h-4 mr-2" />
+                Reject
+              </Button>
+            </div>
           </div>
         )}
       </CardContent>
